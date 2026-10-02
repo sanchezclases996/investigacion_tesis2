@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+    <html xmlns="http://www.w3.org/1999/xhtml" lang="en-US"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Remove PII from conversations by using sensitive information filters - Amazon Bedrock</title><meta name="viewport" content="width=device-width,initial-scale=1" /><meta name="assets_root" content="/assets" /><meta name="target_state" content="guardrails-sensitive-filters" /><meta name="default_state" content="guardrails-sensitive-filters" /><link rel="icon" type="image/ico" href="/assets/images/favicon.ico" /><link rel="shortcut icon" type="image/ico" href="/assets/images/favicon.ico" /><link rel="canonical" href="https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-sensitive-filters.html" /><meta name="description" content="Amazon Bedrock Guardrails helps detect sensitive information, such as personally identifiable information (PII), in input prompts or model responses using sensitive information filters. This filter is a probabilistic machine learning (ML) based solution that is context-dependent and detects sensitive information based on the context within input prompts or model responses. You can configure by selecting from a set of built-in PIIs offered by Amazon Bedrock Guardrails specific to your use case or organization by defining it along with regular expressions (custom regex) that work based on pattern matching to block or mask PII data." /><meta name="deployment_region" content="IAD" /><meta name="product" content="Amazon Bedrock" /><meta name="guide" content="User Guide" /><meta name="abstract" content="User Guide for the Amazon Bedrock service." /><meta name="guide-locale" content="en_us" /><meta name="tocs" content="toc-contents.json" /><link rel="canonical" href="https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-sensitive-filters.html" /><link rel="alternate" href="https://docs.aws.amazon.com/id_id/bedrock/latest/userguide/guardrails-sensitive-filters.html" hreflang="id-id" /><link rel="alternate" href="https://docs.aws.amazon.com/id_id/bedrock/latest/userguide/guardrails-sensitive-filters.html" hreflang="id" /><link rel="alternate" href="https://docs.aws.amazon.com/de_de/bedrock/latest/userguide/guardrails-sensitive-filters.html" hreflang="de-de" /><link rel="alternate" href="https://docs.aws.amazon.com/de_de/bedrock/latest/userguide/guardrails-sensitive-filters.html" hreflang="de" /><link rel="alternate" href="https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-sensitive-filters.html" hreflang="en-us" /><link rel="alternate" href="https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-sensitive-filters.html" hreflang="en" /><link rel="alternate" href="https://docs.aws.amazon.com/es_es/bedrock/latest/userguide/guardrails-sensitive-filters.html" hreflang="es-es" /><link rel="alternate" href="https://docs.aws.amazon.com/es_es/bedrock/latest/userguide/guardrails-sensitive-filters.html" hreflang="es" /><link rel="alternate" href="https://docs.aws.amazon.com/fr_fr/bedrock/latest/userguide/guardrails-sensitive-filters.html" hreflang="fr-fr" /><link rel="alternate" href="https://docs.aws.amazon.com/fr_fr/bedrock/latest/userguide/guardrails-sensitive-filters.html" hreflang="fr" /><link rel="alternate" href="https://docs.aws.amazon.com/it_it/bedrock/latest/userguide/guardrails-sensitive-filters.html" hreflang="it-it" /><link rel="alternate" href="https://docs.aws.amazon.com/it_it/bedrock/latest/userguide/guardrails-sensitive-filters.html" hreflang="it" /><link rel="alternate" href="https://docs.aws.amazon.com/ja_jp/bedrock/latest/userguide/guardrails-sensitive-filters.html" hreflang="ja-jp" /><link rel="alternate" href="https://docs.aws.amazon.com/ja_jp/bedrock/latest/userguide/guardrails-sensitive-filters.html" hreflang="ja" /><link rel="alternate" href="https://docs.aws.amazon.com/ko_kr/bedrock/latest/userguide/guardrails-sensitive-filters.html" hreflang="ko-kr" /><link rel="alternate" href="https://docs.aws.amazon.com/ko_kr/bedrock/latest/userguide/guardrails-sensitive-filters.html" hreflang="ko" /><link rel="alternate" href="https://docs.aws.amazon.com/pt_br/bedrock/latest/userguide/guardrails-sensitive-filters.html" hreflang="pt-br" /><link rel="alternate" href="https://docs.aws.amazon.com/pt_br/bedrock/latest/userguide/guardrails-sensitive-filters.html" hreflang="pt" /><link rel="alternate" href="https://docs.aws.amazon.com/zh_cn/bedrock/latest/userguide/guardrails-sensitive-filters.html" hreflang="zh-cn" /><link rel="alternate" href="https://docs.aws.amazon.com/zh_tw/bedrock/latest/userguide/guardrails-sensitive-filters.html" hreflang="zh-tw" /><link rel="alternate" href="https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-sensitive-filters.html" hreflang="x-default" /><meta name="feedback-folder" content="2d8c2a09-1dac-41bf-9893-c0333d272b2c" /><meta name="feedback-item" content="Bedrock" /><meta name="this_doc_product" content="Amazon Bedrock" /><meta name="this_doc_guide" content="User Guide" /><head xmlns="http://www.w3.org/1999/xhtml"> <script defer="" src="/assets/r/awsdocs-doc-page.2.0.0.js"></script><link href="/assets/r/awsdocs-doc-page.2.0.0.css" rel="stylesheet"/></head>
+<script defer="" id="awsc-panorama-bundle" type="text/javascript" src="https://prod.pa.cdn.uis.awsstatic.com/panorama-nav-init.js" data-config="{'appEntity':'aws-documentation','region':'us-east-1','service':'bedrock'}"></script><meta id="panorama-serviceSubSection" value="User Guide" /><meta id="panorama-serviceConsolePage" value="Remove PII from conversations by using sensitive information filters" /></head><body class="awsdocs awsui"><div class="awsdocs-container"><p><a href="guardrails-sensitive-filters.md">View a markdown version of this page</a></p><awsdocs-header></awsdocs-header><awsui-app-layout id="app-layout" class="awsui-util-no-gutters" ng-controller="ContentController as $ctrl" header-selector="awsdocs-header" navigation-hide="false" navigation-width="$ctrl.navWidth" navigation-open="$ctrl.navOpen" navigation-change="$ctrl.onNavChange($event)" tools-hide="$ctrl.hideTools" tools-width="$ctrl.toolsWidth" tools-open="$ctrl.toolsOpen" tools-change="$ctrl.onToolsChange($event)"><div id="guide-toc" dom-region="navigation"><awsdocs-toc></awsdocs-toc></div><div id="main-column" dom-region="content" tabindex="-1"><awsdocs-view class="awsdocs-view"><div id="awsdocs-content"><head><title>Remove PII from conversations by using sensitive information filters - Amazon Bedrock</title><meta name="pdf" content="/pdfs/bedrock/latest/userguide/bedrock-ug.pdf#guardrails-sensitive-filters" /><meta name="rss" content="bedrock-ug.rss" /><meta name="forums" content="https://repost.aws/tags/TAQeKlaPaNRQ2tWB6P7KrMag" /><meta name="feedback" content="https://docs.aws.amazon.com/forms/aws-doc-feedback?feedback_destination_id=2d8c2a09-1dac-41bf-9893-c0333d272b2c&amp;topic_url=https://docs.aws.amazon.com/en_us/bedrock/latest/userguide/guardrails-sensitive-filters.html" /><meta name="feedback-yes" content="feedbackyes.html?topic_url=https://docs.aws.amazon.com/en_us/bedrock/latest/userguide/guardrails-sensitive-filters.html" /><meta name="feedback-no" content="feedbackno.html?topic_url=https://docs.aws.amazon.com/en_us/bedrock/latest/userguide/guardrails-sensitive-filters.html" /><meta name="keywords" content="Amazon Bedrock,bedrock,content blocking,privacy controls,harmful content,guardrails,denied topics,word filters,make a Amazon Bedrock Guardrails,create Amazon Bedrock Guardrails,assign Amazon Bedrock Guardrails,AWS Console Amazon Bedrock Guardrails,word filters Amazon Bedrock Guardrails,sensitive topic Amazon Bedrock Guardrails,content blocker Amazon Bedrock Guardrails,contextual grounding check Amazon Bedrock Guardrails,Amazon Bedrock Guardrails API,content PII blocker Amazon Bedrock Guardrails,prompt attack check,personal information Amazon Bedrock Guardrails,personally identifiable information,block PII,PII Amazon Bedrock Guardrails" /><link rel="alternate" type="text/markdown" href="guardrails-sensitive-filters.md" title="Markdown version" /><script type="application/ld+json">
+{
+    "@context" : "https://schema.org",
+    "@type" : "BreadcrumbList",
+    "itemListElement" : [
+      {
+        "@type" : "ListItem",
+        "position" : 1,
+        "name" : "AWS",
+        "item" : "https://aws.amazon.com"
+      },
+      {
+        "@type" : "ListItem",
+        "position" : 2,
+        "name" : "Amazon Bedrock",
+        "item" : "https://docs.aws.amazon.com/bedrock/index.html"
+      },
+      {
+        "@type" : "ListItem",
+        "position" : 3,
+        "name" : "User Guide",
+        "item" : "https://docs.aws.amazon.com/bedrock/latest/userguide"
+      },
+      {
+        "@type" : "ListItem",
+        "position" : 4,
+        "name" : "Security, Guardrails, and Observability in Amazon Bedrock",
+        "item" : "https://docs.aws.amazon.com/bedrock/latest/userguide/security.html"
+      },
+      {
+        "@type" : "ListItem",
+        "position" : 5,
+        "name" : "Detect and filter harmful content by using Amazon Bedrock Guardrails",
+        "item" : "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html"
+      },
+      {
+        "@type" : "ListItem",
+        "position" : 6,
+        "name" : "Create your guardrail",
+        "item" : "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-components.html"
+      },
+      {
+        "@type" : "ListItem",
+        "position" : 7,
+        "name" : "Remove PII from conversations by using sensitive information filters",
+        "item" : "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-components.html"
+      }
+    ]
+}
+</script></head><body><div id="main"><div style="display: none"><a href="/pdfs/bedrock/latest/userguide/bedrock-ug.pdf#guardrails-sensitive-filters" target="_blank" rel="noopener noreferrer" title="Open PDF"></a></div><div id="breadcrumbs" class="breadcrumb"><a href="/index.html">Documentation</a><a href="/bedrock/index.html">Amazon Bedrock</a><a href="what-is-bedrock.html">User Guide</a></div><div id="page-toc-src"><a href="#guardrails-sensitive-information-policy-configure">Configure sensitive information policy for your guardrail</a></div><div id="main-content" class="awsui-util-container"><div id="main-col-body"><awsdocs-language-banner data-service="$ctrl.pageService"></awsdocs-language-banner><h1 class="topictitle" id="guardrails-sensitive-filters">Remove PII from conversations by using sensitive information filters</h1><div class="awsdocs-page-header-container"><awsdocs-page-header></awsdocs-page-header><awsdocs-filter-selector id="awsdocs-filter-selector"></awsdocs-filter-selector></div><p> Amazon Bedrock Guardrails helps detect sensitive information, such as personally identifiable information
+            (PII), in input prompts or model responses using sensitive information filters. This filter is a probabilistic machine learning (ML) based solution that is context-dependent
+            and detects sensitive information based on the context within input prompts or model responses. You can configure by selecting from a set of built-in PIIs offered by Amazon Bedrock Guardrails specific to your use case
+            or organization by defining it along with regular expressions (custom regex) that work based on pattern matching to block or mask PII data.
+            </p><div class="awsdocs-note"><div class="awsdocs-note-title"><awsui-icon name="status-info" variant="link"></awsui-icon><h6>Note</h6></div><div class="awsdocs-note-text"><p>This filter evaluates text content only. In tool use (function calling) workloads, it does not evaluate the following, so PII in these fields is neither blocked nor masked:</p><div class="itemizedlist">
+                 
+                 
+                 
+            <ul class="itemizedlist"><li class="listitem">
+                    <p>PII the model generates into tool call arguments (<code class="code">toolUse.input</code> in Converse, <code class="code">tool_use</code> parameters in InvokeModel). For example, if the model passes a customer's email address to a tool that writes a file, that address is not masked.</p>
+                </li><li class="listitem">
+                    <p>PII in tool results your application returns to the model (<code class="code">toolResult</code>).</p>
+                </li><li class="listitem">
+                    <p>PII in the tool definitions you supply (<code class="code">toolSpec.description</code>, <code class="code">toolSpec.inputSchema</code>).</p>
+                </li></ul></div></div></div><p>Sensitive information detection works across both natural language and code domains,
+            including code syntax, comments, string literals, and hybrid content. This helps
+            identify PII embedded in code elements such as variable names, hardcoded credentials, or
+            code documentation.</p><p>You can configure the following modes for handling sensitive information that
+            guardrails detects:</p><div class="itemizedlist">
+             
+             
+        <ul class="itemizedlist"><li class="listitem">
+                <p><b>Block</b> — Sensitive information filter
+                    policies can block requests or responses that include sensitive information.
+                    Examples of such applications might include general questions and answers
+                    based on public documents. If sensitive information is detected in
+                    the prompt or response, the guardrail blocks all the content and returns a
+                    message that you configure.</p>
+            </li><li class="listitem">
+                <p><b>Mask</b> — Sensitive information filter
+                    policies can anonymize or redact information from model requests or responses.
+                    For example, guardrails mask PIIs while generating summaries of conversations
+                    between users and customer service agents. If sensitive information is detected
+                    in the model request or response, the guardrail masks it and replaces it with
+                    the PII type (for example, <code class="code"><span>{</span>NAME}</code> or <code class="code"><span>{</span>EMAIL}</code>).</p>
+            </li></ul></div><p>Amazon Bedrock Guardrails offers the following PIIs to block or anonymize:</p><div class="itemizedlist">
+             
+             
+             
+             
+             
+             
+
+             
+
+        <ul class="itemizedlist"><li class="listitem">
+                <p><b>General</b></p>
+                <div class="itemizedlist">
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                <ul class="itemizedlist"><li class="listitem">
+                        <p><b>ADDRESS</b></p>
+                        <p>A physical address, such as "100 Main Street, Anytown, USA" or "Suite
+                            #12, Building 123". An address can include information such as the
+                            street, building, location, city, state, country, county, zip code,
+                            precinct, and neighborhood. Isolated mentions of city, state, country
+                            are not considered as valid addresses. </p>
+                    </li><li class="listitem">
+                        <p><b>AGE</b></p>
+                        <p>An individual's age, including the quantity and unit of time. For
+                            example, in the phrase "I am 40 years old," Amazon Bedrock Guardrails recognizes "40 years"
+                            as an age. </p>
+                    </li><li class="listitem">
+                        <p><b>NAME</b></p>
+                        <p>An individual's name. This entity type does not include titles, such
+                            as Dr., Mr., Mrs., or Miss. Amazon Bedrock Guardrails does not apply this entity type to
+                            names that are part of organizations or addresses. For example,
+                            guardrails recognizes the "John Doe Organization" as an organization,
+                            and it recognizes "Jane Doe Street" as an address. </p>
+                    </li><li class="listitem">
+                        <p><b>EMAIL</b></p>
+                        <p>An email address, such as
+                            <em>marymajor@email.com</em>.</p>
+                    </li><li class="listitem">
+                        <p><b>PHONE</b></p>
+                        <p>A phone number. This entity type also includes fax and pager numbers.
+                        </p>
+                    </li><li class="listitem">
+                        <p><b>USERNAME</b></p>
+                        <p>A user name that identifies an account, such as a login name, screen
+                            name, nick name, or handle. </p>
+                    </li><li class="listitem">
+                        <p><b>PASSWORD</b></p>
+                        <p>An alphanumeric string that is used as a password, such as
+                                "*<em>very20special#pass*</em>". </p>
+                    </li><li class="listitem">
+                        <p><b>DRIVER_ID</b></p>
+                        <p>The number assigned to a driver's license, which is an official
+                            document permitting an individual to operate one or more motorized
+                            vehicles on a public road. A driver's license number consists of
+                            alphanumeric characters. </p>
+                    </li><li class="listitem">
+                        <p><b>LICENSE_PLATE</b></p>
+                        <p>A license plate for a vehicle is issued by the state or country where
+                            the vehicle is registered. The format for passenger vehicles is
+                            typically five to eight digits, consisting of upper-case letters and
+                            numbers. The format varies depending on the location of the issuing
+                            state or country. </p>
+                    </li><li class="listitem">
+                        <p><b>VEHICLE_IDENTIFICATION_NUMBER</b></p>
+                        <p>A Vehicle Identification Number (VIN) uniquely identifies a vehicle.
+                            VIN content and format are defined in the <em>ISO 3779</em>
+                            specification. Each country has specific codes and formats for VINs.
+                        </p>
+                    </li></ul></div>
+            </li><li class="listitem">
+                <p><b>Finance</b></p>
+                <div class="itemizedlist">
+                     
+                     
+                     
+                     
+                     
+                     
+                <ul class="itemizedlist"><li class="listitem">
+                        <p><b>CREDIT_DEBIT_CARD_CVV</b></p>
+                        <p>A three-digit card verification code (CVV) that is present on VISA,
+                            MasterCard, and Discover credit and debit cards. For American Express
+                            credit or debit cards, the CVV is a four-digit numeric code. </p>
+                    </li><li class="listitem">
+                        <p><b>CREDIT_DEBIT_CARD_EXPIRY</b></p>
+                        <p>The expiration date for a credit or debit card. This number is usually
+                            four digits long and is often formatted as
+                                <em>month/year</em> or <em>MM/YY</em>. Amazon Bedrock Guardrails
+                            recognizes expiration dates such as <em>01/21</em>,
+                                <em>01/2021</em>, and <em>Jan 2021</em>.
+                        </p>
+                    </li><li class="listitem">
+                        <p><b>CREDIT_DEBIT_CARD_NUMBER</b></p>
+                        <p>The number for a credit or debit card. These numbers can vary from 13
+                            to 16 digits in length. However, Amazon Bedrock also recognizes credit or
+                            debit card numbers when only the last four digits are present. </p>
+                    </li><li class="listitem">
+                        <p><b>PIN</b></p>
+                        <p>A personal identification number (PIN) that could be 4 or 5 digits in
+                            length. As an example, these numbers are used to access bank
+                            accounts.</p>
+                    </li><li class="listitem">
+                        <p><b>INTERNATIONAL_BANK_ACCOUNT_NUMBER</b></p>
+                        <p>An International Bank Account Number has specific formats in each
+                            country. For more information, see <a href="https://www.iban.com/structure" rel="noopener noreferrer" target="_blank"><span>www.iban.com/structure</span><awsui-icon class="awsdocs-link-icon" name="external"></awsui-icon></a>.</p>
+                    </li><li class="listitem">
+                        <p><b>SWIFT_CODE</b></p>
+                        <p>A SWIFT code is a standard format of Bank Identifier Code (BIC) used
+                            to specify a particular bank or branch. Banks use these codes for money
+                            transfers such as international wire transfers.</p>
+                        <p>SWIFT codes consist of eight or 11 characters. The 11-digit codes
+                            refer to specific branches, while eight-digit codes (or 11-digit codes
+                            ending in 'XXX') refer to the head or primary office.</p>
+                    </li></ul></div>
+            </li><li class="listitem">
+                <p><b>IT</b></p>
+                <div class="itemizedlist">
+                     
+                     
+                     
+                     
+                     
+                <ul class="itemizedlist"><li class="listitem">
+                        <p><b>IP_ADDRESS</b></p>
+                        <p>An IPv4 address, such as <em>198.51.100.0</em>. </p>
+                    </li><li class="listitem">
+                        <p><b>MAC_ADDRESS</b></p>
+                        <p>A <em>media access control</em> (MAC) address is a unique
+                            identifier assigned to a network interface controller (NIC). </p>
+                    </li><li class="listitem">
+                        <p><b>URL</b></p>
+                        <p>A web address, such as <em>www.example.com</em>. </p>
+                    </li><li class="listitem">
+                        <p><b>AWS_ACCESS_KEY</b></p>
+                        <p>A unique identifier that's associated with a secret access key; you
+                            use the access key ID and secret access key to sign programmatic AWS
+                            requests cryptographically. </p>
+                    </li><li class="listitem">
+                        <p><b>AWS_SECRET_KEY</b></p>
+                        <p>A unique identifier that's associated with an access key. You use the
+                            access key ID and secret access key to sign programmatic AWS requests
+                            cryptographically. </p>
+                    </li></ul></div>
+            </li><li class="listitem">
+                <p><b>USA specific</b></p>
+                <div class="itemizedlist">
+                     
+                     
+                     
+                     
+                     
+                <ul class="itemizedlist"><li class="listitem">
+                        <p><b>US_BANK_ACCOUNT_NUMBER</b></p>
+                        <p>A US bank account number, which is typically 10 to 12 digits long.
+                        </p>
+                    </li><li class="listitem">
+                        <p><b>US_BANK_ROUTING_NUMBER</b></p>
+                        <p>A US bank account routing number. These are typically nine digits
+                            long, </p>
+                    </li><li class="listitem">
+                        <p><b>US_INDIVIDUAL_TAX_IDENTIFICATION_NUMBER</b></p>
+                        <p>A US Individual Taxpayer Identification Number (ITIN) is a nine-digit
+                            number that starts with a "9" and contain a "7" or "8" as the fourth
+                            digit. An ITIN can be formatted with a space or a dash after the third
+                            and forth digits. </p>
+                    </li><li class="listitem">
+                        <p><b>US_PASSPORT_NUMBER</b></p>
+                        <p>A US passport number. Passport numbers range from six to nine
+                            alphanumeric characters. </p>
+                    </li><li class="listitem">
+                        <p><b>US_SOCIAL_SECURITY_NUMBER</b></p>
+                        <p>A US Social Security Number (SSN) is a nine-digit number that is
+                            issued to US citizens, permanent residents, and temporary working
+                            residents. </p>
+                    </li></ul></div>
+            </li><li class="listitem">
+                <p><b>Canada specific</b></p>
+                <div class="itemizedlist">
+                     
+                     
+                <ul class="itemizedlist"><li class="listitem">
+                        <p><b>CA_HEALTH_NUMBER</b></p>
+                        <p>A Canadian Health Service Number is a 10-digit unique identifier,
+                            required for individuals to access healthcare benefits. </p>
+                    </li><li class="listitem">
+                        <p><b>CA_SOCIAL_INSURANCE_NUMBER</b></p>
+                        <p>A Canadian Social Insurance Number (SIN) is a nine-digit unique
+                            identifier, required for individuals to access government programs and
+                            benefits.</p>
+                        <p>The SIN is formatted as three groups of three digits, such as
+                                <em>123-456-789</em>. A SIN can be validated through a
+                            simple check-digit process called the <a href="https://www.wikipedia.org/wiki/Luhn_algorithm" rel="noopener noreferrer" target="_blank"><span>Luhn
+                                algorithm</span><awsui-icon class="awsdocs-link-icon" name="external"></awsui-icon></a>.</p>
+                    </li></ul></div>
+            </li><li class="listitem">
+                <p><b>UK Specific</b></p>
+                <div class="itemizedlist">
+                     
+                     
+                     
+                <ul class="itemizedlist"><li class="listitem">
+                        <p><b>UK_NATIONAL_HEALTH_SERVICE_NUMBER</b></p>
+                        <p>A UK National Health Service Number is a 10-17 digit number, such as
+                                <em>485 777 3456</em>. The current system formats the
+                            10-digit number with spaces after the third and sixth digits. The final
+                            digit is an error-detecting checksum.</p>
+                    </li><li class="listitem">
+                        <p><b>UK_NATIONAL_INSURANCE_NUMBER</b></p>
+                        <p>A UK National Insurance Number (NINO) provides individuals with access
+                            to National Insurance (social security) benefits. It is also used for
+                            some purposes in the UK tax system.</p>
+                        <p>The number is nine digits long and starts with two letters, followed
+                            by six numbers and one letter. A NINO can be formatted with a space or a
+                            dash after the two letters and after the second, forth, and sixth
+                            digits.</p>
+                    </li><li class="listitem">
+                        <p><b>UK_UNIQUE_TAXPAYER_REFERENCE_NUMBER</b></p>
+                        <p>A UK Unique Taxpayer Reference (UTR) is a 10-digit number that
+                            identifies a taxpayer or a business. </p>
+                    </li></ul></div>
+            </li><li class="listitem">
+                <p><b>Custom</b></p>
+                <div class="itemizedlist">
+                     
+                <ul class="itemizedlist"><li class="listitem">
+                        <p><b>Regex filter</b></p>
+                        <p>You can use regular expressions to define patterns for a guardrail
+                            to recognize and act upon such as serial number, booking ID, or other custom patterns.</p>
+                    </li></ul></div>
+            </li></ul></div><div class="awsdocs-note"><div class="awsdocs-note-title"><awsui-icon name="status-info" variant="link"></awsui-icon><h6>Note</h6></div><div class="awsdocs-note-text"><p>The PII model performs more effectively when it is provided with sufficient
+                context. To enhance its accuracy, include more contextual information and avoid
+                submitting single words or short phrases to the model. Since PII can be
+                context-dependent (for example. a string of digits might represent an AWS KMS key
+                or a user ID depending on the surrounding information), providing comprehensive
+                context is crucial for accurate identification. </p></div></div><div class="awsdocs-note"><div class="awsdocs-note-title"><awsui-icon name="status-info" variant="link"></awsui-icon><h6>Note</h6></div><div class="awsdocs-note-text"><p>PII masking applies only to content that is sent to the inference model (input
+                prompts) and content that is returned from the inference model (model responses). It
+                does not apply to the following:</p><div class="itemizedlist">
+                 
+                 
+            <ul class="itemizedlist"><li class="listitem">
+                    <p><b>Model invocation logs</b> — If you
+                        enabled <a href="./model-invocation-logging.html">Monitor model invocation using CloudWatch Logs and Amazon S3</a>, the
+                        <code class="code">input</code> field in Amazon CloudWatch Logs always contains the original,
+                        unmodified request regardless of guardrail intervention. To protect
+                        sensitive information in your logs, use <a href="AmazonCloudWatch/latest/logs/mask-sensitive-log-data.html" rel="noopener noreferrer" target="_blank">Amazon CloudWatch log data protection</a>.</p>
+                </li><li class="listitem">
+                    <p><b>Guardrails trace output</b> — The
+                        <code class="code">match</code> field in <a href="https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_GuardrailPiiEntityFilter.html">GuardrailPiiEntityFilter</a> that is returned in API responses
+                        (such as the <code class="code">trace</code> object of the Converse API) contains the
+                        original PII value, not the masked output. This behavior is by design so
+                        that your application can use the detection result for its own
+                        logic.</p>
+                </li></ul></div></div></div><div class="awsdocs-note"><div class="awsdocs-note-title"><awsui-icon name="status-info" variant="link"></awsui-icon><h6>Note</h6></div><div class="awsdocs-note-text"><p>A custom regex filter of sensitive information filters does not support a regex
+                lookaround match. </p></div></div>
+            <h2 id="guardrails-sensitive-information-policy-configure">Configure sensitive information policy for your guardrail</h2>
+            <p>You can configure sensitive information policies for your guardrail by using the
+                AWS Management Console or Amazon Bedrock API.</p>
+            <awsdocs-tabs><dl style="display: none">
+                <dt>Console</dt><dd tab-id="console">
+                        <div class="procedure"><ol><li><p>Sign in to the AWS Management Console with an IAM identity that has permissions to use the Amazon Bedrock console. Then, open the Amazon Bedrock console at
+                            <a href="https://console.aws.amazon.com/bedrock" rel="noopener noreferrer" target="_blank"><span>https://console.aws.amazon.com/bedrock</span><awsui-icon class="awsdocs-link-icon" name="external"></awsui-icon></a>.</p></li><li>
+                                <p>From the left navigation pane, choose
+                                        <b>Guardrails</b>, and then choose
+                                        <b>Create guardrail</b>.</p>
+                            </li><li>
+                                <p>For <b>Provide guardrail details</b> page, do
+                                    the following:</p>
+                                <ol><li>
+                                        <p>In the <b>Guardrail details</b> section,
+                                            provide a <b>Name</b> and optional
+                                                <b>Description</b> for the
+                                            guardrail.</p>
+                                    </li><li>
+                                        <p>For <b>Messaging for blocked
+                                            prompts</b>, enter a message that displays when
+                                            your guardrail is applied. Select the <b>Apply
+                                                the same blocked message for responses</b>
+                                            checkbox to use the same message when your guardrail is
+                                            applied on the response.</p>
+                                    </li><li>
+                                        <p>(Optional) To enable <a href="./guardrails-cross-region.html">cross-Region
+                                                inference</a> for your guardrail, expand
+                                                <b>Cross-Region inference</b>, and
+                                            then select <b>Enable cross-Region inference for
+                                                your guardrail</b>. Choose a guardrail
+                                            profile that defines the destination AWS Regions where
+                                            guardrail inference requests can be routed.</p>
+                                    </li><li>
+                                        <p>(Optional) By default, your guardrail is encrypted
+                                            with an AWS managed key. To use your own
+                                            customer-managed KMS key, expand <b>KMS key
+                                                selection</b> and select the
+                                                <b>Customize encryption settings
+                                                (advanced)</b> checkbox.</p>
+                                        <p>You can select an existing AWS KMS key or select
+                                                <b>Create an AWS KMS key</b> to create a
+                                            new one.</p>
+                                    </li><li>
+                                        <p>(Optional) To add tags to your guardrail, expand
+                                                <b>Tags</b>, and then, select
+                                                <b>Add new tag</b> for each tag you
+                                            define.</p>
+                                        <p>For more information, see <a href="./tagging.html">Tagging Amazon Bedrock resources</a>.</p>
+                                    </li><li>
+                                        <p>Choose <b>Next</b>.</p>
+                                    </li></ol>
+                            </li><li>
+                                <p>On the <b>Add sensitive information filters
+                                        page</b> page, do the following to configure filters
+                                    to block or mask sensitive information:</p>
+                                <ol><li>
+                                        <p>In the <b>PII types</b> section,
+                                            configure the personally identifiable information (PII)
+                                            categories to block, mask, or take no action (detect
+                                            mode). You have the following options:</p>
+                                        <div class="itemizedlist">
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                        <ul class="itemizedlist"><li class="listitem">
+                                                <p>To add all PII types, select the dropdown
+                                                  arrow next to <b>Add PII type</b>.
+                                                  Then select the guardrail behavior to apply to
+                                                  them.</p>
+                                                <div class="awsdocs-note awsdocs-warning"><div class="awsdocs-note-title"><awsui-icon name="status-warning" variant="error"></awsui-icon><h6>Warning</h6></div><div class="awsdocs-note-text"><p>If you specify a behavior, any existing
+                                                  behavior that you configured for PII types will be
+                                                  overwritten.</p></div></div>
+                                            </li><li class="listitem">
+                                                <p>To delete a PII type, select the trash can
+                                                  icon ( 
+     
+     <img src="/images/bedrock/latest/userguide/images/icons/trash.png" alt="Trash can icon representing a delete action." data-alt-text-source="generated" style="max-width:20px" height="20px" />
+     
+     
+    ).</p>
+                                            </li><li class="listitem">
+                                                <p>To delete rows that contain errors, select
+                                                  <b>Delete all</b> and then select
+                                                  <b>Delete all rows with
+                                                  error</b></p>
+                                            </li><li class="listitem">
+                                                <p>To delete all PII types, select
+                                                  <b>Delete all</b> and then select
+                                                  <b>Delete all rows</b></p>
+                                            </li><li class="listitem">
+                                                <p>To search for a row, enter an expression in
+                                                  the search bar.</p>
+                                            </li><li class="listitem">
+                                                <p>To show only rows with errors, select the
+                                                  dropdown menu labeled <b>Show
+                                                  all</b> and select <b>Show errors
+                                                  only</b>.</p>
+                                            </li><li class="listitem">
+                                                <p>To configure the size of each page in the
+                                                  table or the column display in the table, select
+                                                  the settings icon ( 
+     
+     <img src="/images/bedrock/latest/userguide/images/icons/settings.png" alt="Gear icon representing settings or configuration options." data-alt-text-source="generated" style="max-width:20px" height="20px" />
+     
+     
+    ). Set your
+                                                  preferences and then select
+                                                  <b>Confirm</b>.</p>
+                                            </li></ul></div>
+                                    </li><li>
+                                        <p>In the <b>Regex patterns</b> section,
+                                            use regular expressions to define patterns for the
+                                            guardrail to filter. You have the following
+                                            options:</p>
+                                        <div class="itemizedlist">
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                        <ul class="itemizedlist"><li class="listitem">
+                                                <p>To add a pattern, select <b>Add regex
+                                                  pattern</b>. Configure the following
+                                                  fields:</p>
+                                                <div class="table-container"><div class="table-contents"><table id="w626aac20c15c35c21c23b5b1b3b1b7b3b3b3b1b3"><thead>
+                                                  <tr>
+                                                  <th>Field</th>
+                                                  <th>Description</th>
+                                                  </tr>
+                                                  </thead>
+                                                  <tr>
+                                                  <td tabindex="-1">Name</td>
+                                                  <td tabindex="-1">A name for the pattern</td>
+                                                  </tr>
+                                                  <tr>
+                                                  <td tabindex="-1">Regex pattern</td>
+                                                  <td tabindex="-1">A regular expression that defines the
+                                                  pattern</td>
+                                                  </tr>
+                                                  <tr>
+                                                  <td tabindex="-1">Input</td>
+                                                  <td tabindex="-1">Choose whether to
+                                                  <b>Block</b> content containing the
+                                                  pattern or <b>Mask</b> it with an
+                                                  identifier. To take no action, select
+                                                  <b>Detect (no action)</b>.</td>
+                                                  </tr>
+                                                  <tr>
+                                                  <td tabindex="-1">Output</td>
+                                                  <td tabindex="-1"></td>
+                                                  </tr>
+                                                  
+                                                  <tr>
+                                                  <td tabindex="-1">Add description</td>
+                                                  <td tabindex="-1">(Optional) Write a description for the
+                                                  pattern</td>
+                                                  </tr>
+                                                  </table></div></div>
+                                            </li><li class="listitem">
+                                                <p>To edit a pattern, select the three dots icon
+                                                  in the same row as the topic in the
+                                                  <b>Actions</b> column. Then select
+                                                  <b>Edit</b>. After you are finished
+                                                  editing, select
+                                                  <b>Confirm</b>.</p>
+                                            </li><li class="listitem">
+                                                <p>To delete a pattern or patterns, select the
+                                                  checkboxes for the patterns to delete. Select
+                                                  <b>Delete</b> and then select
+                                                  <b>Delete selected</b>.</p>
+                                            </li><li class="listitem">
+                                                <p>To delete all the patterns, select
+                                                  <b>Delete</b> and then select
+                                                  <b>Delete all</b>.</p>
+                                            </li><li class="listitem">
+                                                <p>To search for a pattern, enter an expression
+                                                  in the search bar.</p>
+                                            </li><li class="listitem">
+                                                <p>To configure the size of each page in the
+                                                  table or the column display in the table, select
+                                                  the settings icon ( 
+     
+     <img src="/images/bedrock/latest/userguide/images/icons/settings.png" alt="Gear icon representing settings or configuration options." data-alt-text-source="generated" style="max-width:20px" height="20px" />
+     
+     
+    ). Set your
+                                                  preferences and then select
+                                                  <b>Confirm</b>.</p>
+                                            </li></ul></div>
+                                    </li><li>
+                                        <p>When you finish configuring sensitive information
+                                            filters, select <b>Next</b> or
+                                                <b>Skip to review and
+                                            create</b>.</p>
+                                    </li></ol>
+                            </li></ol></div>
+                    </dd>
+                <dt>API</dt><dd tab-id="api">
+                        <p>To create a guardrail with sensitive information policies, send a
+                                <a href="https://docs.aws.amazon.com/bedrock/latest/APIReference/API_CreateGuardrail.html">CreateGuardrail</a>
+                            request. The request format is as follows:</p>
+                        <pre class="programlisting"><div class="code-btn-container"><div class="btn-copy-code" title="Copy"><awsui-icon name="copy"></awsui-icon></div></div><!--DEBUG: cli (json)--><code class="json ">POST /guardrails HTTP/1.1
+Content-type: application/json
+
+<span>{</span>
+    "blockedInputMessaging": "string",
+    "blockedOutputsMessaging": "string",
+    "sensitiveInformationPolicyConfig": <span>{</span>
+        "piiEntitiesConfig": [<span>{</span>
+            "type": "ADDRESS | EMAIL | PHONE | NAME | SSN | ...",
+            "action": "BLOCK | ANONYMIZE | NONE",
+            "inputAction": "BLOCK | ANONYMIZE | NONE",
+            "inputEnabled": true,
+            "outputAction": "BLOCK | ANONYMIZE | NONE",
+            "outputEnabled": true
+        }],
+        "regexesConfig": [<span>{</span>
+            "name": "string",
+            "pattern": "string",
+            "action": "BLOCK | ANONYMIZE | NONE",
+            "description": "string",
+            "inputAction": "BLOCK | ANONYMIZE | NONE",
+            "inputEnabled": true,
+            "outputAction": "BLOCK | ANONYMIZE | NONE",
+            "outputEnabled": true
+        }]
+    },
+    "description": "string",
+    "kmsKeyId": "string",
+    "name": "string",
+    "tags": [<span>{</span>
+        "key": "string",
+        "value": "string"
+    }],
+    "crossRegionConfig": <span>{</span>
+        "guardrailProfileIdentifier": "string"
+    }
+}</code></pre>
+                        <div class="itemizedlist">
+                             
+                             
+                             
+                             
+                             
+                             
+                        <ul class="itemizedlist"><li class="listitem">
+                                <p>Specify a <code class="code">name</code> and <code class="code">description</code> for
+                                    the guardrail.</p>
+                            </li><li class="listitem">
+                                <p>Specify messages for when the guardrail successfully blocks a
+                                    prompt or a model response in the
+                                        <code class="code">blockedInputMessaging</code> and
+                                        <code class="code">blockedOutputsMessaging</code> fields.</p>
+                            </li><li class="listitem">
+                                <p>Configure sensitive information policies in the
+                                        <code class="code">sensitiveInformationPolicyConfig</code> object:</p>
+                                <div class="itemizedlist">
+                                     
+                                     
+                                <ul class="itemizedlist"><li class="listitem">
+                                        <p>Use <code class="code">piiEntitiesConfig</code> array to configure
+                                            predefined PII entity types:</p>
+                                        <div class="itemizedlist">
+                                             
+                                             
+                                             
+                                        <ul class="itemizedlist"><li class="listitem">
+                                                <p>Specify the PII entity type in the
+                                                  <code class="code">type</code> field. Valid values include
+                                                  <code class="code">ADDRESS</code>, <code class="code">EMAIL</code>,
+                                                  <code class="code">PHONE</code>, <code class="code">NAME</code>,
+                                                  <code class="code">US_SOCIAL_SECURITY_NUMBER</code>, among
+                                                  others.</p>
+                                            </li><li class="listitem">
+                                                <p>Specify the action to take when the PII entity
+                                                  is detected in the <code class="code">action</code> field.
+                                                  Choose <code class="code">BLOCK</code> to block content,
+                                                  <code class="code">ANONYMIZE</code> to mask the content, or
+                                                  <code class="code">NONE</code> to take no action but return
+                                                  detection information.</p>
+                                            </li><li class="listitem">
+                                                <p>(Optional) Use <code class="code">inputAction</code>,
+                                                  <code class="code">inputEnabled</code>,
+                                                  <code class="code">outputAction</code>, and
+                                                  <code class="code">outputEnabled</code> to configure different
+                                                  behaviors for prompts and responses.</p>
+                                            </li></ul></div>
+                                    </li><li class="listitem">
+                                        <p>Use <code class="code">regexesConfig</code> array to define custom
+                                            patterns to detect:</p>
+                                        <div class="itemizedlist">
+                                             
+                                             
+                                             
+                                             
+                                             
+                                        <ul class="itemizedlist"><li class="listitem">
+                                                <p>Specify a <code class="code">name</code> for the regex
+                                                  pattern (1-100 characters).</p>
+                                            </li><li class="listitem">
+                                                <p>Define the regular expression
+                                                  <code class="code">pattern</code> to detect (1-500
+                                                  characters).</p>
+                                            </li><li class="listitem">
+                                                <p>Specify the <code class="code">action</code> to take when
+                                                  the pattern is detected. Choose <code class="code">BLOCK</code>
+                                                  to block content, <code class="code">ANONYMIZE</code> to mask
+                                                  the content, or <code class="code">NONE</code> to take no
+                                                  action but return detection information.</p>
+                                            </li><li class="listitem">
+                                                <p>(Optional) Provide a <code class="code">description</code>
+                                                  for the regex pattern (1-1000 characters).</p>
+                                            </li><li class="listitem">
+                                                <p>(Optional) Use <code class="code">inputAction</code>,
+                                                  <code class="code">inputEnabled</code>,
+                                                  <code class="code">outputAction</code>, and
+                                                  <code class="code">outputEnabled</code> to configure different
+                                                  behaviors for prompts and responses.</p>
+                                            </li></ul></div>
+                                    </li></ul></div>
+                            </li><li class="listitem">
+                                <p>(Optional) Attach any tags to the guardrail. For more
+                                    information, see <a href="./tagging.html">Tagging Amazon Bedrock resources</a>.</p>
+                            </li><li class="listitem">
+                                <p>(Optional) For security, include the ARN of a KMS key in the
+                                        <code class="code">kmsKeyId</code> field.</p>
+                            </li><li class="listitem">
+                                <p>(Optional) To enable <a href="./guardrails-cross-region.html">cross-Region inference</a>, specify a guardrail profile
+                                    in the <code class="code">crossRegionConfig</code> object.</p>
+                            </li></ul></div>
+                        <p>The response format is as follows:</p>
+                        <pre class="programlisting"><div class="code-btn-container"><div class="btn-copy-code" title="Copy"><awsui-icon name="copy"></awsui-icon></div></div><!--DEBUG: cli (json)--><code class="json ">HTTP/1.1 202
+Content-type: application/json
+
+<span>{</span>
+    "createdAt": "string",
+    "guardrailArn": "string",
+    "guardrailId": "string",
+    "version": "string"
+}</code></pre>
+                    </dd>
+            </dl></awsdocs-tabs>
+        <awsdocs-copyright class="copyright-print"></awsdocs-copyright><awsdocs-thumb-feedback right-edge="{{$ctrl.thumbFeedbackRightEdge}}"></awsdocs-thumb-feedback></div><noscript><div><div><div><div id="js_error_message"><p><img src="https://d1ge0kk1l5kms0.cloudfront.net/images/G/01/webservices/console/warning.png" alt="Warning" /> <strong>Javascript is disabled or is unavailable in your browser.</strong></p><p>To use the Amazon Web Services Documentation, Javascript must be enabled. Please refer to your browser's Help pages for instructions.</p></div></div></div></div></noscript><div id="main-col-footer" class="awsui-util-font-size-0"><div id="doc-conventions"><a target="_top" href="/general/latest/gr/docconventions.html">Document Conventions</a></div><div class="prev-next"><div id="previous" class="prev-link" accesskey="p" href="./guardrails-word-filters.html">Add word filters</div><div id="next" class="next-link" accesskey="n" href="./guardrails-contextual-grounding-check.html">Add contextual
+                grounding checks</div></div></div><awsdocs-page-utilities></awsdocs-page-utilities></div><div id="quick-feedback-yes" style="display: none;"><div class="title">Did this page help you? - Yes</div><div class="content"><p>Thanks for letting us know we're doing a good job!</p><p>If you've got a moment, please tell us what we did right so we can do more of it.</p><p><awsui-button id="fblink" rel="noopener noreferrer" target="_blank" text="Feedback" click="linkClick($event)" href="https://docs.aws.amazon.com/forms/aws-doc-feedback?feedback_destination_id=2d8c2a09-1dac-41bf-9893-c0333d272b2c&amp;topic_url=https://docs.aws.amazon.com/en_us/bedrock/latest/userguide/guardrails-sensitive-filters.html"></awsui-button></p></div></div><div id="quick-feedback-no" style="display: none;"><div class="title">Did this page help you? - No</div><div class="content"><p>Thanks for letting us know this page needs work. We're sorry we let you down.</p><p>If you've got a moment, please tell us how we can make the documentation better.</p><p><awsui-button id="fblink" rel="noopener noreferrer" target="_blank" text="Feedback" click="linkClick($event)" href="https://docs.aws.amazon.com/forms/aws-doc-feedback?feedback_destination_id=2d8c2a09-1dac-41bf-9893-c0333d272b2c&amp;topic_url=https://docs.aws.amazon.com/en_us/bedrock/latest/userguide/guardrails-sensitive-filters.html"></awsui-button></p></div></div></div></body></div></awsdocs-view><div class="page-loading-indicator" id="page-loading-indicator"><awsui-spinner size="large"></awsui-spinner></div></div><div id="tools-panel" dom-region="tools"><awsdocs-tools-panel id="awsdocs-tools-panel"></awsdocs-tools-panel></div></awsui-app-layout><awsdocs-cookie-banner class="doc-cookie-banner"></awsdocs-cookie-banner></div></body></html>

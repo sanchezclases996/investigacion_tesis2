@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+    <html xmlns="http://www.w3.org/1999/xhtml" lang="en-US"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Test your guardrail - Amazon Bedrock</title><meta name="viewport" content="width=device-width,initial-scale=1" /><meta name="assets_root" content="/assets" /><meta name="target_state" content="guardrails-test" /><meta name="default_state" content="guardrails-test" /><link rel="icon" type="image/ico" href="/assets/images/favicon.ico" /><link rel="shortcut icon" type="image/ico" href="/assets/images/favicon.ico" /><link rel="canonical" href="https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-test.html" /><meta name="description" content="Learn how to evaluate and validate your Amazon Bedrock guardrail configurations to ensure they properly filter harmful content before deployment." /><meta name="deployment_region" content="IAD" /><meta name="product" content="Amazon Bedrock" /><meta name="guide" content="User Guide" /><meta name="abstract" content="User Guide for the Amazon Bedrock service." /><meta name="guide-locale" content="en_us" /><meta name="tocs" content="toc-contents.json" /><link rel="canonical" href="https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-test.html" /><link rel="alternate" href="https://docs.aws.amazon.com/id_id/bedrock/latest/userguide/guardrails-test.html" hreflang="id-id" /><link rel="alternate" href="https://docs.aws.amazon.com/id_id/bedrock/latest/userguide/guardrails-test.html" hreflang="id" /><link rel="alternate" href="https://docs.aws.amazon.com/de_de/bedrock/latest/userguide/guardrails-test.html" hreflang="de-de" /><link rel="alternate" href="https://docs.aws.amazon.com/de_de/bedrock/latest/userguide/guardrails-test.html" hreflang="de" /><link rel="alternate" href="https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-test.html" hreflang="en-us" /><link rel="alternate" href="https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-test.html" hreflang="en" /><link rel="alternate" href="https://docs.aws.amazon.com/es_es/bedrock/latest/userguide/guardrails-test.html" hreflang="es-es" /><link rel="alternate" href="https://docs.aws.amazon.com/es_es/bedrock/latest/userguide/guardrails-test.html" hreflang="es" /><link rel="alternate" href="https://docs.aws.amazon.com/fr_fr/bedrock/latest/userguide/guardrails-test.html" hreflang="fr-fr" /><link rel="alternate" href="https://docs.aws.amazon.com/fr_fr/bedrock/latest/userguide/guardrails-test.html" hreflang="fr" /><link rel="alternate" href="https://docs.aws.amazon.com/it_it/bedrock/latest/userguide/guardrails-test.html" hreflang="it-it" /><link rel="alternate" href="https://docs.aws.amazon.com/it_it/bedrock/latest/userguide/guardrails-test.html" hreflang="it" /><link rel="alternate" href="https://docs.aws.amazon.com/ja_jp/bedrock/latest/userguide/guardrails-test.html" hreflang="ja-jp" /><link rel="alternate" href="https://docs.aws.amazon.com/ja_jp/bedrock/latest/userguide/guardrails-test.html" hreflang="ja" /><link rel="alternate" href="https://docs.aws.amazon.com/ko_kr/bedrock/latest/userguide/guardrails-test.html" hreflang="ko-kr" /><link rel="alternate" href="https://docs.aws.amazon.com/ko_kr/bedrock/latest/userguide/guardrails-test.html" hreflang="ko" /><link rel="alternate" href="https://docs.aws.amazon.com/pt_br/bedrock/latest/userguide/guardrails-test.html" hreflang="pt-br" /><link rel="alternate" href="https://docs.aws.amazon.com/pt_br/bedrock/latest/userguide/guardrails-test.html" hreflang="pt" /><link rel="alternate" href="https://docs.aws.amazon.com/zh_cn/bedrock/latest/userguide/guardrails-test.html" hreflang="zh-cn" /><link rel="alternate" href="https://docs.aws.amazon.com/zh_tw/bedrock/latest/userguide/guardrails-test.html" hreflang="zh-tw" /><link rel="alternate" href="https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-test.html" hreflang="x-default" /><meta name="feedback-folder" content="2d8c2a09-1dac-41bf-9893-c0333d272b2c" /><meta name="feedback-item" content="Bedrock" /><meta name="this_doc_product" content="Amazon Bedrock" /><meta name="this_doc_guide" content="User Guide" /><head xmlns="http://www.w3.org/1999/xhtml"> <script defer="" src="/assets/r/awsdocs-doc-page.2.0.0.js"></script><link href="/assets/r/awsdocs-doc-page.2.0.0.css" rel="stylesheet"/></head>
+<script defer="" id="awsc-panorama-bundle" type="text/javascript" src="https://prod.pa.cdn.uis.awsstatic.com/panorama-nav-init.js" data-config="{'appEntity':'aws-documentation','region':'us-east-1','service':'bedrock'}"></script><meta id="panorama-serviceSubSection" value="User Guide" /><meta id="panorama-serviceConsolePage" value="Test your guardrail" /></head><body class="awsdocs awsui"><div class="awsdocs-container"><p><a href="guardrails-test.md">View a markdown version of this page</a></p><awsdocs-header></awsdocs-header><awsui-app-layout id="app-layout" class="awsui-util-no-gutters" ng-controller="ContentController as $ctrl" header-selector="awsdocs-header" navigation-hide="false" navigation-width="$ctrl.navWidth" navigation-open="$ctrl.navOpen" navigation-change="$ctrl.onNavChange($event)" tools-hide="$ctrl.hideTools" tools-width="$ctrl.toolsWidth" tools-open="$ctrl.toolsOpen" tools-change="$ctrl.onToolsChange($event)"><div id="guide-toc" dom-region="navigation"><awsdocs-toc></awsdocs-toc></div><div id="main-column" dom-region="content" tabindex="-1"><awsdocs-view class="awsdocs-view"><div id="awsdocs-content"><head><title>Test your guardrail - Amazon Bedrock</title><meta name="pdf" content="/pdfs/bedrock/latest/userguide/bedrock-ug.pdf#guardrails-test" /><meta name="rss" content="bedrock-ug.rss" /><meta name="forums" content="https://repost.aws/tags/TAQeKlaPaNRQ2tWB6P7KrMag" /><meta name="feedback" content="https://docs.aws.amazon.com/forms/aws-doc-feedback?feedback_destination_id=2d8c2a09-1dac-41bf-9893-c0333d272b2c&amp;topic_url=https://docs.aws.amazon.com/en_us/bedrock/latest/userguide/guardrails-test.html" /><meta name="feedback-yes" content="feedbackyes.html?topic_url=https://docs.aws.amazon.com/en_us/bedrock/latest/userguide/guardrails-test.html" /><meta name="feedback-no" content="feedbackno.html?topic_url=https://docs.aws.amazon.com/en_us/bedrock/latest/userguide/guardrails-test.html" /><meta name="keywords" content="Amazon Bedrock,bedrock,content blocking,privacy controls,harmful content,guardrails,denied topics,word filters,check a guardrail,test guardrail,guardrail test,evaluate guardrail" /><link rel="alternate" type="text/markdown" href="guardrails-test.md" title="Markdown version" /><script type="application/ld+json">
+{
+    "@context" : "https://schema.org",
+    "@type" : "BreadcrumbList",
+    "itemListElement" : [
+      {
+        "@type" : "ListItem",
+        "position" : 1,
+        "name" : "AWS",
+        "item" : "https://aws.amazon.com"
+      },
+      {
+        "@type" : "ListItem",
+        "position" : 2,
+        "name" : "Amazon Bedrock",
+        "item" : "https://docs.aws.amazon.com/bedrock/index.html"
+      },
+      {
+        "@type" : "ListItem",
+        "position" : 3,
+        "name" : "User Guide",
+        "item" : "https://docs.aws.amazon.com/bedrock/latest/userguide"
+      },
+      {
+        "@type" : "ListItem",
+        "position" : 4,
+        "name" : "Security, Guardrails, and Observability in Amazon Bedrock",
+        "item" : "https://docs.aws.amazon.com/bedrock/latest/userguide/security.html"
+      },
+      {
+        "@type" : "ListItem",
+        "position" : 5,
+        "name" : "Detect and filter harmful content by using Amazon Bedrock Guardrails",
+        "item" : "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html"
+      },
+      {
+        "@type" : "ListItem",
+        "position" : 6,
+        "name" : "Test your guardrail",
+        "item" : "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html"
+      }
+    ]
+}
+</script></head><body><div id="main"><div style="display: none"><a href="/pdfs/bedrock/latest/userguide/bedrock-ug.pdf#guardrails-test" target="_blank" rel="noopener noreferrer" title="Open PDF"></a></div><div id="breadcrumbs" class="breadcrumb"><a href="/index.html">Documentation</a><a href="/bedrock/index.html">Amazon Bedrock</a><a href="what-is-bedrock.html">User Guide</a></div><div id="main-content" class="awsui-util-container"><div id="main-col-body"><awsdocs-language-banner data-service="$ctrl.pageService"></awsdocs-language-banner><h1 class="topictitle" id="guardrails-test">Test your guardrail</h1><div class="awsdocs-page-header-container"><awsdocs-page-header></awsdocs-page-header><awsdocs-filter-selector id="awsdocs-filter-selector"></awsdocs-filter-selector></div><p>After you create a guardrail, a <em>working draft</em> (<code class="code">DRAFT</code>)
+        version is available. The working draft is a version of the guardrail that you can
+        continually edit and iterate upon until you reach a satisfactory configuration for your use
+        case. You can test and benchmark the working draft or other versions of the guardrail to 
+        ensure that the configurations meet your use-case requirements. Edit configurations in the working draft
+        and test different prompts to see how well the guardrail evaluates and intercepts the
+        prompts or responses.</p><p>When you are satisfied with the configuration, you can then create a
+        version of the guardrail, which acts as a snapshot of the configurations of the working
+        draft when you create the version. You can use versions to streamline guardrails deployment
+        to production applications every time you make modifications to your guardrails. Any changes
+        to the working draft or a new version created will not be reflected in your generative AI
+        application until you specifically use the new version in the application.</p><awsdocs-tabs><dl style="display: none">
+        <dt>Console</dt><dd tab-id="console">
+                
+                <div class="procedure"><h6>To test a guardrail to see if blocks harmful content</h6><ol><li>
+    <p>Sign in to the AWS Management Console with an IAM identity that has permissions to use the Amazon Bedrock console. Then, open the Amazon Bedrock console at
+                            <a href="https://console.aws.amazon.com/bedrock" rel="noopener noreferrer" target="_blank"><span>https://console.aws.amazon.com/bedrock</span><awsui-icon class="awsdocs-link-icon" name="external"></awsui-icon></a>.</p>
+</li><li>
+    <p>Choose <b>Guardrails</b> from the left navigation pane. Then, select a guardrail in the <b>Guardrails</b> section.</p>
+</li><li>
+                        <p>A test window appears on the right. You have the following options in the test window:</p>
+                        
+                        <ol><li>
+                                <p>By default, the working draft of the guardrail is used in the test window. To test a different version of the guardrail, choose <b>Working draft</b> at the top of the test window and then select the version.</p>
+                            </li><li>
+                                <p>To select a model, choose <b>Select model</b>. After you make a choice, select <b>Apply</b>. To change the model, choose <b>Change</b>.</p>
+                            </li><li>
+                                <p>Enter a prompt in the <b>Prompt</b> box.</p>
+                                
+                                
+                                
+                            </li><li>
+                                <p>To elicit a model response, select <b>Run</b>.</p>
+                            </li><li>
+                                <p>The model returns a response in the <b>Final response</b> box (that may be modified by the guardrail). If the guardrail blocks or filters the prompt or model response, a message appears under <b>Guardrail check</b> that informs you how many violations the guardrail detected.</p>
+                            </li><li>
+                                <p>To view the topics or harmful categories in the prompt or response that were recognized and allowed past the filter or blocked by it, select <b>View trace</b>.</p>
+                            </li><li>
+                                <p>Use the <b>Prompt</b> and <b>Model
+                                    response</b> tabs to view the topics or harmful categories that were
+                                    filtered or blocked by the guardrail.</p>
+                            </li></ol>
+                    </li></ol></div>
+                
+                <p>You can also test the guardrail in the <b>Text playground</b>. Select the 
+                    playground and select the <b>Guardrail</b> in the <b>Configurations</b> 
+                    pane before testing prompts.</p>                
+            </dd>
+        <dt>API</dt><dd tab-id="api">
+                
+                <p>To use a guardrail in model invocation, send an <a href="https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_InvokeModel.html">InvokeModel</a> or <a href="https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_InvokeModelWithResponseStream.html">InvokeModelWithResponseStream</a> request. Alternatively, if you are building a
+                    conversational application, you can use the <a href="./guardrails-use-converse-api.html">Converse API</a>.</p>
+                    
+                <p><b>Request format</b></p>
+                
+                <p>The request endpoints for invoking a model, with and without streaming, are as follows. Replace <code class="replaceable">modelId</code> with the ID of the model to use.</p>
+                
+                <div class="itemizedlist">
+                     
+                     
+                <ul class="itemizedlist"><li class="listitem">
+                        <p><code class="code">InvokeModel</code> – POST /model/<code class="replaceable">modelId</code>/invoke HTTP/1.1</p>
+                    </li><li class="listitem">
+                        <p><code class="code">InvokeModelWithResponseStream</code> – POST /model/<code class="replaceable">modelId</code>/invoke-with-response-stream HTTP/1.1</p>
+                    </li></ul></div>
+                
+                
+                
+                <p>The header for both API operations is of the following format.</p>
+                
+                <pre class="programlisting"><div class="code-btn-container"><div class="btn-copy-code" title="Copy"><awsui-icon name="copy"></awsui-icon></div></div><!--DEBUG: cli (json)--><code class="json ">Accept: <code class="replaceable">accept</code>
+Content-Type: <code class="replaceable">contentType</code>
+X-Amzn-Bedrock-Trace: <code class="replaceable">trace</code>
+X-Amzn-Bedrock-GuardrailIdentifier: <code class="replaceable">guardrailIdentifier</code>
+X-Amzn-Bedrock-GuardrailVersion: <code class="replaceable">guardrailVersion</code>
+                </code></pre>
+                
+                <p>The parameters are described below.</p>
+                
+                <div class="itemizedlist">
+                     
+                     
+                     
+                     
+                     
+                <ul class="itemizedlist"><li class="listitem">
+                        <p>Set <code class="code">Accept</code> to the MIME type of the inference body in the response. The default value is <code class="code">application/json</code>.</p>
+                    </li><li class="listitem">
+                        <p>Set <code class="code">Content-Type</code> to the MIME type of the input data in the request. The default value is <code class="code">application/json</code>.</p>
+                    </li><li class="listitem">
+                        <p>Set <code class="code">X-Amzn-Bedrock-Trace</code> to <code class="code">ENABLED</code> to enable a trace to see amongst other things what content was blocked by guardrails and why..</p>                        
+                    </li><li class="listitem">
+                        <p>Set <code class="code">X-Amzn-Bedrock-GuardrailIdentifier</code> with the guardrail identifier of the guardrail you want to apply to the request  to the request and model response.</p>
+                    </li><li class="listitem">
+                        <p>Set <code class="code">X-Amzn-Bedrock-GuardrailVersion </code> with the version of the guardrail you want to apply to the request and model response.</p>
+                    </li></ul></div>
+                
+                <p>The general request body format is 
+                    shown in the following example. The <code class="code">tagSuffix</code> property is only used with 
+                    <em>Input tagging</em>. You can also configure the guardrail on 
+                    streaming synchronously or asynchronously by using <code class="code">streamProcessingMode</code>.  
+                    This only works with <code class="code">InvokeModelWithResponseStream</code>.</p>
+                
+                <pre class="programlisting"><div class="code-btn-container"><div class="btn-copy-code" title="Copy"><awsui-icon name="copy"></awsui-icon></div></div><!--DEBUG: cli (json)--><code class="json "><span>{</span>
+    <code class="replaceable">&lt;see model details&gt;</code>,
+    "amazon-bedrock-guardrailConfig": <span>{</span>
+        "tagSuffix": "<code class="replaceable">string</code>", 
+        "streamProcessingMode": "<code class="replaceable">SYNCHRONOUS" | "ASYNCHRONOUS</code>"
+    }
+}</code></pre>                
+                
+                <div class="awsdocs-note awsdocs-warning"><div class="awsdocs-note-title"><awsui-icon name="status-warning" variant="error"></awsui-icon><h6>Warning</h6></div><div class="awsdocs-note-text"><p>You will get an error in the following situations</p><div class="itemizedlist">
+                         
+                         
+                         
+                    <ul class="itemizedlist"><li class="listitem">
+                            <p>You enable the guardrail but there is no <code class="code">amazon-bedrock-guardrailConfig</code> field in the request body.</p>
+                        </li><li class="listitem">
+                            <p>You disable the guardrail but you specify an <code class="code">amazon-bedrock-guardrailConfig</code> field in the request body.</p>
+                        </li><li class="listitem">
+                            <p>You enable the guardrail but the <code class="code">contentType</code> is not <code class="code">application/json</code>.</p>
+                        </li></ul></div></div></div>
+                
+                <p>To see the request body for different models, see <a href="./model-parameters.html">Inference request parameters and response fields for foundation models</a>.</p>
+                
+                <div class="awsdocs-note"><div class="awsdocs-note-title"><awsui-icon name="status-info" variant="link"></awsui-icon><h6>Note</h6></div><div class="awsdocs-note-text"><p>For Cohere Command models, you can only specify one generation in the <code class="code">num_generations</code> field if you use a guardrail.</p></div></div>
+            
+            <p>If you enable a guardrail and its trace, the general format of the response for invoking a model, with and without streaming, is as follows. To see the format of the rest of the <code class="code">body</code> for each model, see <a href="./model-parameters.html">Inference request parameters and response fields for foundation models</a>. The <code class="replaceable">contentType</code> matches what you specified in the request.</p>
+            
+            <div class="itemizedlist">
+                 
+                 
+            <ul class="itemizedlist"><li class="listitem">
+                    <p><code class="code">InvokeModel</code></p>
+                    
+                    <pre class="programlisting"><div class="code-btn-container"><div class="btn-copy-code" title="Copy"><awsui-icon name="copy"></awsui-icon></div></div><!--DEBUG: cli (json)--><code class="json ">HTTP/1.1 200
+Content-Type: contentType
+
+<span>{</span>
+    &lt;see model details for model-specific fields&gt;,
+    "completion": "&lt;model response&gt;",
+    "amazon-bedrock-guardrailAction": "INTERVENED | NONE",
+    "amazon-bedrock-trace": <span>{</span>
+        "guardrail": <span>{</span>
+            "modelOutput": [
+                "&lt;see model details for model-specific fields&gt;"
+            ],
+            "input": <span>{</span>
+                "<code class="replaceable">sample-guardrailId</code>": <span>{</span>
+                    "topicPolicy": <span>{</span>
+                        "topics": [
+                            <span>{</span>
+                                "name": "string",
+                                "type": "string",
+                                "action": "string"
+                            }
+                        ]
+                    },
+                    "contentPolicy": <span>{</span>
+                        "filters": [
+                            <span>{</span>
+                                "type": "string",
+                                "confidence": "string",
+                                "filterStrength": "string",
+                                "action": "string"
+                            }
+                        ]
+                    },
+                    "wordPolicy": <span>{</span>
+                        "customWords": [
+                            <span>{</span>
+                                "match": "string",
+                                "action": "string"
+                            }
+                        ],
+                        "managedWordLists": [
+                            <span>{</span>
+                                "match": "string",
+                                "type": "string",
+                                "action": "string"
+                            }
+                        ]
+                    },
+                    "sensitiveInformationPolicy": <span>{</span>
+                        "piiEntities": [
+                            <span>{</span>
+                                "type": "string",
+                                "match": "string",
+                                "action": "string"
+                            }
+                        ],
+                        "regexes": [
+                            <span>{</span>
+                                "name": "string",
+                                "regex": "string",
+                                "match": "string",
+                                "action": "string"
+                            }
+                        ]
+                    },
+                    "invocationMetrics": <span>{</span>
+                        "guardrailProcessingLatency": "integer",
+                        "usage": <span>{</span>
+                            "topicPolicyUnits": "integer",
+                            "contentPolicyUnits": "integer",
+                            "wordPolicyUnits": "integer",
+                            "sensitiveInformationPolicyUnits": "integer",
+                            "sensitiveInformationPolicyFreeUnits": "integer",
+                            "contextualGroundingPolicyUnits": "integer"
+                        },
+                        "guardrailCoverage": <span>{</span>
+                            "textCharacters": <span>{</span>
+                            "guarded": "integer",
+                            "total": "integer"
+                            }
+                        }
+                    }
+                }
+            },
+            "outputs": ["<code class="replaceable">same guardrail trace format as input</code>"]
+        }
+    }
+}  </code></pre>
+                </li><li class="listitem">
+                    <p><code class="code">InvokeModelWithResponseStream</code> – Each response returns a <code class="code">chunk</code> whose text is in the <code class="code">bytes</code> field, alongside any exceptions that occur. The guardrail trace is returned only for the last chunk.</p>
+                    
+                    <pre class="programlisting"><div class="code-btn-container"><div class="btn-copy-code" title="Copy"><awsui-icon name="copy"></awsui-icon></div></div><!--DEBUG: cli (json)--><code class="json ">HTTP/1.1 200
+X-Amzn-Bedrock-Content-Type: <code class="replaceable">contentType</code>
+Content-type: application/json
+
+<span>{</span>
+    "chunk": <span>{</span> 
+      "bytes": "&lt;blob&gt;"
+    },
+  "internalServerException": <span>{</span>},
+  "modelStreamErrorException": <span>{</span>},
+  "throttlingException": <span>{</span>},
+  "validationException": <span>{</span>},
+  "amazon-bedrock-guardrailAction": "INTERVENED | NONE",
+  "amazon-bedrock-trace": <span>{</span>
+    "guardrail": <span>{</span>
+      "modelOutput": ["&lt;see model details for model-specific fields&gt;"],
+      "input": <span>{</span>
+        "<code class="replaceable">sample-guardrailId</code>": <span>{</span>
+          "topicPolicy": <span>{</span>
+            "topics": [
+              <span>{</span>
+                "name": "string",
+                "type": "string",
+                "action": "string"
+              }
+            ]
+          },
+          "contentPolicy": <span>{</span>
+            "filters": [
+              <span>{</span>
+                "type": "string",
+                "confidence": "string",
+                "filterStrength": "string",
+                "action": "string"
+              }
+            ]
+          },
+          "wordPolicy": <span>{</span>
+            "customWords": [
+              <span>{</span>
+                "match": "string",
+                "action": "string"
+              }
+            ],
+            "managedWordLists": [
+              <span>{</span>
+                "match": "string",
+                "type": "string",
+                "action": "string"
+              }
+            ]
+          },
+          "sensitiveInformationPolicy": <span>{</span>
+            "piiEntities": [
+              <span>{</span>
+                "type": "string",
+                "match": "string",
+                "action": "string"
+              }
+            ],
+            "regexes": [
+              <span>{</span>
+                "name": "string",
+                "regex": "string",
+                "match": "string",
+                "action": "string"
+              }
+            ]
+          },
+          "invocationMetrics": <span>{</span>
+            "guardrailProcessingLatency": "integer",
+            "usage": <span>{</span>
+              "topicPolicyUnits": "integer",
+              "contentPolicyUnits": "integer",
+              "wordPolicyUnits": "integer",
+              "sensitiveInformationPolicyUnits": "integer",
+              "sensitiveInformationPolicyFreeUnits": "integer",
+              "contextualGroundingPolicyUnits": "integer"
+            },
+            "guardrailCoverage": <span>{</span>
+              "textCharacters": <span>{</span>
+                "guarded": "integer",
+                "total": "integer"
+              }
+            }
+          }
+        }
+      },
+      "outputs": ["<code class="replaceable">same guardrail trace format as input</code>"]
+    }
+  }
+}
+    </code></pre>
+                    
+                </li></ul></div>
+            
+            <p>The response returns the following fields if you enable a guardrail.</p>
+            
+            <div class="itemizedlist">
+                 
+                 
+            <ul class="itemizedlist"><li class="listitem">
+                    <p><code class="code">amazon-bedrock-guardrailAction</code> – Specifies whether the guardrail <code class="code">INTERVENED</code> or not (<code class="code">NONE</code>).</p>
+                </li><li class="listitem">
+                    <p><code class="code">amazon-bedrock-trace</code> – Only appears if you enable the trace. Contains a list of traces, each of which provides information about the content that the guardrail blocked. The trace contains the following fields:</p>
+                    
+                    <div class="itemizedlist">
+                         
+                         
+                         
+                    <ul class="itemizedlist"><li class="listitem">
+                            <p><code class="code">modelOutput</code> – An object containing the outputs from the model that was blocked.</p>
+                        </li><li class="listitem">
+                            <p><code class="code">input</code> – Contains the following details about the guardrail's assessment of the prompt:</p>
+                            <div class="itemizedlist">
+                                 
+                                 
+                                 
+                                 
+                            <ul class="itemizedlist"><li class="listitem">
+                                    <p><code class="code">topicPolicy</code> – Contains <code class="code">topics</code>, a list of assessments for each topic policy that was violated. Each topic includes the following fields:</p>
+                                    <div class="itemizedlist">
+                                         
+                                         
+                                         
+                                    <ul class="itemizedlist"><li class="listitem">
+                                            <p><code class="code">name</code> – The name of the topic policy.</p>
+                                        </li><li class="listitem">
+                                            <p><code class="code">type</code> – Specifies whether to deny the topic.</p>
+                                        </li><li class="listitem">
+                                            <p><code class="code">action</code> – Specifies that the topic was blocked </p>
+                                        </li></ul></div>
+                                    
+                                </li><li class="listitem">
+                                    <p><code class="code">contentPolicy</code> – Contains <code class="code">filters</code>, a list of assessments for each content filter that was violated. Each filter includes the following fields:</p>
+                                    
+                                    <div class="itemizedlist">
+                                         
+                                         
+                                         
+                                    <ul class="itemizedlist"><li class="listitem">
+                                            <p><code class="code">type</code> – The category of the content filter.</p>
+                                        </li><li class="listitem">
+                                            <p><code class="code">confidence</code> – The level of confidence that the output can be categorized as belonging to the harmful category.</p>
+                                        </li><li class="listitem">
+                                            <p><code class="code">action</code> – Specifies that the content was blocked. This result depends on the strength of the filter set in the guardrail.</p>
+                                        </li></ul></div>
+                                    
+                                </li><li class="listitem">
+                                    <p><code class="code">wordPolicy</code> – Contains a collection of custom words and 
+                                        managed words were filtered and a corresponding assessment on those words. 
+                                        Each list contains the following fields:</p>                                     
+                                    <div class="itemizedlist">
+                                         
+                                         
+                                    <ul class="itemizedlist"><li class="listitem">
+                                            <p><code class="code">customWords</code> – A list of custom words that matched the filter.</p>
+                                            <div class="itemizedlist">
+                                             
+                                            
+                                             
+                                        <ul class="itemizedlist"><li class="listitem">
+                                                <p><code class="code">match</code> – The word or phrase that matched the filter.</p>
+                                            </li><li class="listitem">
+                                                <p><code class="code">action</code> – Specifies that the word was blocked.</p>
+                                            </li></ul></div>
+                                        </li><li class="listitem">
+                                            <p><code class="code">managedWordLists</code> – A list of managed words that matched the filter.</p>
+                                            <div class="itemizedlist">
+                                                 
+                                             
+                                            
+                                                 
+                                            <ul class="itemizedlist"><li class="listitem">
+                                                    <p><code class="code">match</code> – The word or phrase that matched the filter.</p>
+                                                </li><li class="listitem">
+                                                <p><code class="code">type</code> – Specifies the type of managed word that matched the filter. 
+                                                    For example, <code class="code">PROFANITY</code> if it matched the profanity filter.</p>
+                                            </li><li class="listitem">
+                                                    <p><code class="code">action</code> – Specifies that the word was blocked.</p>
+                                                </li></ul></div>
+                                        </li></ul></div>
+                                </li><li class="listitem">
+                                    <p><code class="code">sensitiveInformationPolicy</code> – Contains the following objects, which contain assessments for personally identifiable information (PII) and regex filters that were violated:</p>
+                                    <div class="itemizedlist">
+                                         
+                                         
+                                    <ul class="itemizedlist"><li class="listitem">
+                                            <p><code class="code">piiEntities</code> – A list of assessments for each PII filter that was violated. Each filter contains the following fields:</p>
+                                            <div class="itemizedlist">
+                                                 
+                                                 
+                                                
+                                                 
+                                            <ul class="itemizedlist"><li class="listitem">
+                                                    <p><code class="code">type</code> – The PII type that was found.</p>
+                                                </li><li class="listitem">
+                                                    <p><code class="code">match</code> – The word or phrase that matched the filter.</p>
+                                                </li><li class="listitem">
+                                                    <p><code class="code">action</code> – Specifies whether the word was <code class="code">BLOCKED</code> or replaced with an identifier (<code class="code">ANONYMIZED</code>).</p>
+                                                </li></ul></div>
+                                        </li><li class="listitem">
+                                            <p><code class="code">regexes</code> – A list of assessments for each regex filter that was violated. Each filter contains the following fields:</p>
+                                            <div class="itemizedlist">
+                                                 
+                                                 
+                                                 
+                                                
+                                                 
+                                            <ul class="itemizedlist"><li class="listitem">
+                                                    <p><code class="code">name</code> – The name of the regex filter.</p>
+                                                </li><li class="listitem">
+                                                    <p><code class="code">regex</code> – The PII type that was found.</p>
+                                                </li><li class="listitem">
+                                                    <p><code class="code">match</code> – The word or phrase that matched the filter.</p>
+                                                </li><li class="listitem">
+                                                    <p><code class="code">action</code> – Specifies whether the word was <code class="code">BLOCKED</code> or replaced with an identifier (<code class="code">ANONYMIZED</code>).</p>
+                                                </li></ul></div>
+                                        </li></ul></div>
+                                </li></ul></div>
+                        </li><li class="listitem">
+                            <p><code class="code">outputs</code> – A list of details about the guardrail's assessment of the model response. Each item in the list is an object that matches the format of the <code class="code">input</code> object. For more details, see the <code class="code">input</code> field.</p>
+                        </li></ul></div>
+                    
+                </li></ul></div>
+                
+            </dd>
+    </dl></awsdocs-tabs><awsdocs-copyright class="copyright-print"></awsdocs-copyright><awsdocs-thumb-feedback right-edge="{{$ctrl.thumbFeedbackRightEdge}}"></awsdocs-thumb-feedback></div><noscript><div><div><div><div id="js_error_message"><p><img src="https://d1ge0kk1l5kms0.cloudfront.net/images/G/01/webservices/console/warning.png" alt="Warning" /> <strong>Javascript is disabled or is unavailable in your browser.</strong></p><p>To use the Amazon Web Services Documentation, Javascript must be enabled. Please refer to your browser's Help pages for instructions.</p></div></div></div></div></noscript><div id="main-col-footer" class="awsui-util-font-size-0"><div id="doc-conventions"><a target="_top" href="/general/latest/gr/docconventions.html">Document Conventions</a></div><div class="prev-next"><div id="previous" class="prev-link" accesskey="p" href="./guardrails-enforcements.html">Cross-account safeguards</div><div id="next" class="next-link" accesskey="n" href="./guardrails-view.html">View information about your guardrails</div></div></div><awsdocs-page-utilities></awsdocs-page-utilities></div><div id="quick-feedback-yes" style="display: none;"><div class="title">Did this page help you? - Yes</div><div class="content"><p>Thanks for letting us know we're doing a good job!</p><p>If you've got a moment, please tell us what we did right so we can do more of it.</p><p><awsui-button id="fblink" rel="noopener noreferrer" target="_blank" text="Feedback" click="linkClick($event)" href="https://docs.aws.amazon.com/forms/aws-doc-feedback?feedback_destination_id=2d8c2a09-1dac-41bf-9893-c0333d272b2c&amp;topic_url=https://docs.aws.amazon.com/en_us/bedrock/latest/userguide/guardrails-test.html"></awsui-button></p></div></div><div id="quick-feedback-no" style="display: none;"><div class="title">Did this page help you? - No</div><div class="content"><p>Thanks for letting us know this page needs work. We're sorry we let you down.</p><p>If you've got a moment, please tell us how we can make the documentation better.</p><p><awsui-button id="fblink" rel="noopener noreferrer" target="_blank" text="Feedback" click="linkClick($event)" href="https://docs.aws.amazon.com/forms/aws-doc-feedback?feedback_destination_id=2d8c2a09-1dac-41bf-9893-c0333d272b2c&amp;topic_url=https://docs.aws.amazon.com/en_us/bedrock/latest/userguide/guardrails-test.html"></awsui-button></p></div></div></div></body></div></awsdocs-view><div class="page-loading-indicator" id="page-loading-indicator"><awsui-spinner size="large"></awsui-spinner></div></div><div id="tools-panel" dom-region="tools"><awsdocs-tools-panel id="awsdocs-tools-panel"></awsdocs-tools-panel></div></awsui-app-layout><awsdocs-cookie-banner class="doc-cookie-banner"></awsdocs-cookie-banner></div></body></html>

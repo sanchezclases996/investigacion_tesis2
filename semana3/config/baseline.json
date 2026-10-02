@@ -1,0 +1,7 @@
+{
+  "seed": 42,
+  "baseline": "BM25",
+  "ks": [5, 20],
+  "chunk_max_chars": 1200,
+  "nota": "Split fijo por muestra estratificada en data/DATA_MANIFEST.json (seed 42)."
+}
