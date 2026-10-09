@@ -9,7 +9,6 @@ data:
 	. .venv/bin/activate && python -m thesis_routing.pipeline.prepare_data
 
 eda:
-	@echo "EDA solo después de revisar data/STATUS.md e inventario"
 	bash scripts/run_eda.sh
 
 prepare: data

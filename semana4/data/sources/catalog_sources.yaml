@@ -1,6 +1,5 @@
 # Catálogo de fuentes públicas UMA (caso Facultad de Ingeniería y Negocios / SJL).
 # Orden de trabajo: (1) registrar → (2) descargar → (3) extraer → (4) organizar → (5) EDA.
-# No inventar metadatos: si falta año/páginas, dejar vacío hasta medir el archivo.
 
 case: UMA-SJL
 portals:

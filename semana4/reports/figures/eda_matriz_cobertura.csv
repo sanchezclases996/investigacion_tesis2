@@ -1,0 +1,13 @@
+tema,D001,D002,D003,D004,D005,D006,D007,D008,D009,D010,D011,D012
+matricula,Parcial,Sí,Parcial,Parcial,Parcial,Parcial,Parcial,Parcial,No,No,Parcial,Parcial
+asistencia,Sí,No,Parcial,No,No,Parcial,Parcial,Parcial,No,No,No,Sí
+evaluacion,Sí,Parcial,Sí,Parcial,Sí,Sí,Sí,Sí,Parcial,No,Sí,Sí
+creditos,Sí,Parcial,Parcial,Parcial,Parcial,Parcial,Parcial,No,Parcial,Parcial,Parcial,Sí
+prerrequisitos,No,Parcial,No,No,No,No,No,No,Parcial,No,No,No
+convalidacion,Parcial,Parcial,No,No,No,Parcial,No,No,Sí,No,Parcial,Parcial
+tramites_grados,Sí,No,Sí,Parcial,Sí,Sí,Parcial,Parcial,Sí,No,Sí,Sí
+becas,No,Parcial,Parcial,No,No,Sí,Sí,No,No,No,No,Parcial
+admision,Parcial,Parcial,Sí,Parcial,Parcial,Sí,No,No,No,No,Sí,Sí
+tarifas,Parcial,Sí,Parcial,Sí,Parcial,No,Sí,No,No,Parcial,Parcial,Sí
+malla_plan,Sí,Parcial,Sí,Parcial,Parcial,No,No,Parcial,Parcial,No,Parcial,Sí
+calendario,Parcial,Parcial,Parcial,Parcial,No,Parcial,No,No,No,No,No,Parcial
