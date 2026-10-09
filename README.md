@@ -1,6 +1,4 @@
-# Investigación II — entregables del curso
-
-Maestría en Ciencias con mención en Inteligencia Artificial (FIIS–UNI).
+# Investigación II
 
 **Tema:** asistente de consultas académicas-administrativas con enrutamiento predictivo.
 
