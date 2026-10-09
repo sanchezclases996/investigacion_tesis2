@@ -74,11 +74,15 @@ def _infer_strategy(categoria: str) -> str:
     return "A1"
 
 
-def _flags(categoria: str, respuesta: str) -> dict[str, bool]:
+def _flags(categoria: str, doc_referencia: str) -> dict[str, bool]:
+    """Flags de diseño; respondible = hay evidencia en corpus actual (no pendiente/D010)."""
+    doc = doc_referencia.strip()
+    respondible = bool(doc) and not doc.startswith("pendiente_") and doc != "D010"
+    # malla_demo: evidencia demo, no oficial; se marca respondible para pruebas A3 controladas
     return {
         "requiere_herramienta": categoria == "R",
         "requiere_multiples_fuentes": categoria == "M",
-        "es_respondible": bool(respuesta.strip()),
+        "es_respondible": respondible,
     }
 
 
@@ -239,13 +243,8 @@ def _classify_faq_question(pregunta: str) -> tuple[str, str, str]:
 def _to_record(item: dict[str, str], idx: int) -> QuestionRecord:
     cat = item["categoria"]
     resp = item.get("respuesta", "")
-    flags = _flags(cat, resp)
-    # No respondible si la fuente institucional aún no está en el corpus
     doc = item.get("doc_referencia", "D012")
-    if doc.startswith("pendiente_"):
-        flags["es_respondible"] = False
-    if doc == "D010":
-        flags["es_respondible"] = False
+    flags = _flags(cat, doc)
     return QuestionRecord(
         query_id=f"Q{idx:03d}",
         pregunta=item["pregunta"],

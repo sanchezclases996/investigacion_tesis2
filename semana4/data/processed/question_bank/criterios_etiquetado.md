@@ -23,7 +23,7 @@ La longitud de la pregunta no define la complejidad.
 
 - `doc_referencia`: documento o artefacto donde se busca la evidencia.
 - `respuesta_esperada`: solo si hay respaldo en FAQ o extracto revisado; si no, vacío.
-- `es_respondible`: verdadero solo con evidencia en el corpus actual.
+- `es_respondible`: verdadero si `doc_referencia` existe en el corpus usable (no `pendiente_*`, no D010 débil). No exige aún `respuesta_esperada` llena.
 - `validacion_experta`: `draft` hasta revisión institucional.
 - `requiere_herramienta`: verdadero para consultas tipo R sobre grafo/malla.
 - `requiere_multiples_fuentes`: verdadero para tipo M.
