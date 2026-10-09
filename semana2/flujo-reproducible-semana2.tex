@@ -1,0 +1,399 @@
+% !TEX program = xelatex
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[margin=1.7cm]{geometry}
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setdefaultlanguage{spanish}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, fit, calc, backgrounds}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{microtype}
+\usepackage{xspace}
+
+\setmainfont{Arial}
+\setsansfont{Arial}
+
+\hypersetup{colorlinks=true, linkcolor=black, urlcolor=blue!50!black}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\titleformat{\section}{\bfseries\large}{\thesection.}{0.4em}{}
+\titleformat{\subsection}{\bfseries\normalsize}{\thesubsection.}{0.35em}{}
+\titlespacing*{\section}{0pt}{0.7em}{0.25em}
+\titlespacing*{\subsection}{0pt}{0.45em}{0.15em}
+\setlist[itemize]{leftmargin=1.15em, itemsep=0.05em, topsep=0.1em}
+\setlist[enumerate]{leftmargin=1.25em, itemsep=0.05em, topsep=0.1em}
+
+\newcommand{\piroute}{$\pi(x)$\xspace}
+
+\begin{document}
+
+\begin{center}
+{\LARGE\bfseries Pipeline experimental completo y reproducible}\\[0.25em]
+{\large Proyecto de Investigación II}\\[0.45em]
+\begin{tabular}{@{}p{0.22\textwidth}p{0.72\textwidth}@{}}
+\bfseries Título del plan: &
+Asistente de consultas académicas-administrativas con enrutamiento predictivo \\[0.15em]
+\bfseries Caso: &
+Facultad de Ingeniería y Negocios, UMA (San Juan de Lurigancho) \\[0.15em]
+\bfseries Tipo según guía: &
+LLM + RAG, herramientas sobre malla, y enrutamiento predictivo de estrategias \\
+\end{tabular}
+\end{center}
+
+\vspace{0.3em}
+\noindent
+La clave es que otra persona pueda ejecutar el proceso y comprender cómo se pasa de los documentos originales a los resultados. Este es el diseño del flujo experimental para la tesis.
+
+\section{Vista del pipeline (cómo se lee el documento)}
+
+Hay dos diagramas. El primero muestra el \textbf{pipeline experimental} (de los documentos al informe). El segundo muestra la \textbf{arquitectura en tiempo de consulta} (qué hace el sistema una vez construido). Las fases~1--12 detallan cada caja.
+
+\subsection*{Figura 1. Pipeline experimental (doce fases)}
+
+\begin{center}
+\begin{tikzpicture}[
+  font=\scriptsize,
+  >=Latex,
+  stage/.style={draw, rounded corners=2pt, align=center, inner sep=2.8pt,
+                minimum width=2.05cm, minimum height=0.95cm},
+  arr/.style={->, thick},
+]
+% Fila 1: datos
+\node[stage, fill=blue!12] (f1) {1. Definición\\experimento};
+\node[stage, fill=blue!12, right=0.22cm of f1] (f2) {2. Adquisición\\de datos};
+\node[stage, fill=blue!12, right=0.22cm of f2] (f3) {3. Extracción\\y limpieza};
+\node[stage, fill=blue!12, right=0.22cm of f3] (f4) {4. EDA\\del corpus};
+\node[stage, fill=blue!12, right=0.22cm of f4] (f5) {5. Banco de\\consultas};
+\node[stage, fill=blue!12, right=0.22cm of f5] (f6) {6. Validación\\dataset};
+
+\foreach \a/\b in {f1/f2,f2/f3,f3/f4,f4/f5,f5/f6}
+  \draw[arr] (\a) -- (\b);
+
+% Fila 2: experimento
+\node[stage, fill=orange!15, below=0.55cm of f1] (f7) {7. Partición\\conjuntos};
+\node[stage, fill=orange!15, right=0.22cm of f7] (f8) {8. Estrategias\\A0--A5};
+\node[stage, fill=orange!15, right=0.22cm of f8] (f9) {9. Ejecución\\controlada};
+\node[stage, fill=green!12, right=0.22cm of f9] (f10) {10. Evaluación\\métricas};
+\node[stage, fill=green!12, right=0.22cm of f10] (f11) {11. Análisis\\estadístico};
+\node[stage, fill=green!12, right=0.22cm of f11] (f12) {12. Repro.\\e informe};
+
+\foreach \a/\b in {f7/f8,f8/f9,f9/f10,f10/f11,f11/f12}
+  \draw[arr] (\a) -- (\b);
+
+\draw[arr] (f6.south) -- ++(0,-0.22) -| (f7.north);
+
+% Leyenda de bandas
+\begin{scope}[on background layer]
+  \node[fit=(f1)(f6), inner sep=4pt, fill=blue!4, rounded corners=3pt] {};
+  \node[fit=(f7)(f9), inner sep=4pt, fill=orange!6, rounded corners=3pt] {};
+  \node[fit=(f10)(f12), inner sep=4pt, fill=green!5, rounded corners=3pt] {};
+\end{scope}
+
+\node[font=\tiny, anchor=west, text=blue!50!black] at ($(f1.west)+(-0.05,0.72)$)
+  {Datos y banco};
+\node[font=\tiny, anchor=west, text=orange!70!black] at ($(f7.west)+(-0.05,-0.72)$)
+  {Implementación y corridas};
+\node[font=\tiny, anchor=east, text=green!50!black] at ($(f12.east)+(0.05,-0.72)$)
+  {Resultados};
+\end{tikzpicture}
+\end{center}
+
+{\footnotesize Figura~1. De la documentación original al informe final. Azul: preparar datos y banco. Naranja: implementar y ejecutar. Verde: medir y reportar.}
+
+\subsection*{Figura 2. Arquitectura en tiempo de consulta}
+
+\begin{center}
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+  font=\scriptsize,
+  >=Latex,
+  box/.style={draw, rounded corners=2pt, align=center, inner sep=3pt},
+  arr/.style={->, thick},
+  dasharr/.style={->, thick, densely dashed},
+  strat/.style={draw, rounded corners=1pt, align=center, fill=gray!8,
+                minimum width=2.5cm, minimum height=0.52cm, inner sep=2pt},
+]
+% Columna 1-2: entrada
+\node[box, fill=yellow!15] (q) at (0,2.4) {Consulta\\estudiante};
+\node[box, fill=blue!10] (an) at (2.4,2.4) {Análisis\\tipo / fuentes};
+\node[box, fill=orange!20] (rou) at (4.7,2.4) {Router \piroute\\(solo A5)};
+
+% Columna estrategias (centrada, espaciada)
+\node[strat] (a0) at (7.2,3.7) {A0 base};
+\node[strat] (a1) at (7.2,3.05) {A1 RAG};
+\node[strat] (a2) at (7.2,2.4) {A2 FT (si viable)};
+\node[strat] (a3) at (7.2,1.75) {A3 RAG + tools};
+\node[strat] (a4) at (7.2,1.1) {A4 compuesta fija};
+
+% Salida
+\node[box, fill=green!12] (out) at (10.0,2.4) {Respuesta\\+ fuentes / persona};
+\node[box, fill=green!18] (met) at (12.5,2.4) {Métricas\\cal./lat./costo};
+
+\draw[arr] (q) -- (an);
+\draw[arr] (an) -- (rou);
+\foreach \n in {a0,a1,a2,a3,a4}
+  \draw[arr] (rou.east) -- ++(0.2,0) |- (\n.west);
+\foreach \n in {a0,a1,a3,a4}
+  \draw[arr] (\n.east) -- ++(0.2,0) |- (out.west);
+\draw[arr] (a2) -- (out);
+\draw[arr] (out) -- (met);
+
+% Bypass A0--A4 (sin router)
+\draw[dasharr, gray] (an.south) -- ++(0,-0.45) -| (a4.south);
+
+% Datos debajo, con hueco claro respecto a A4 (y=1.1)
+\node[box, fill=blue!8, minimum width=2.8cm] (corp) at (2.4,-0.35)
+  {Corpus docs\\norma / calendario};
+\node[box, fill=blue!8, minimum width=2.8cm] (mall) at (7.2,-0.35)
+  {Grafo malla\\tools / reglas};
+\node[box, fill=yellow!12, minimum width=2.8cm] (gold) at (11.5,-0.35)
+  {Banco gold\\validado};
+
+\draw[dasharr] (corp) |- (a1);
+\draw[dasharr] (mall) -- (a3);
+\draw[dasharr] (gold) |- (met);
+
+\node[font=\tiny, align=left, text width=12.5cm] at (6.5,-1.25)
+  {A5 = con router (elige A0--A4). A0--A4 fijas: flecha gris. Discontinuas: RAG, tools, evaluación.};
+\end{tikzpicture}%
+}
+\end{center}
+
+{\footnotesize Figura~2. Arquitectura al atender una consulta. El experimento compara A0--A5 sobre el mismo banco.}
+
+\section{Fase 1. Definición del experimento}
+
+Antes de programar, documentar:
+
+\begin{itemize}
+  \item Pregunta de investigación.
+  \item Hipótesis.
+  \item Alcance del dominio (consultas académicas-administrativas en la facultad UMA--SJL).
+  \item Estrategias que se compararán (A0--A5).
+  \item Métricas principales.
+  \item Criterios de éxito.
+  \item Limitaciones previstas.
+\end{itemize}
+
+\paragraph{Pregunta central.}
+¿El routing predictivo de estrategias de IA mejora la relación entre calidad, latencia y costo frente a utilizar una estrategia fija para todas las consultas académicas-administrativas?
+
+No hace falta suponer que el routing será superior. El experimento debe permitir que los resultados confirmen o contradigan esa hipótesis.
+
+\section{Fase 2. Adquisición de datos}
+
+\paragraph{Entradas.}
+Documentación pública; documentación institucional autorizada; preguntas frecuentes; consultas reales anonimizadas, si se consiguen.
+
+\paragraph{Procedimiento.}
+\begin{itemize}
+  \item Registrar cada fuente.
+  \item Descargar los archivos permitidos.
+  \item Conservar metadatos y versiones.
+  \item Registrar fecha de consulta y procedencia.
+  \item Documentar restricciones de uso.
+  \item Separar fuentes públicas de información autorizada no pública.
+\end{itemize}
+
+\paragraph{Salida.}
+Un inventario documental reproducible.
+
+\section{Fase 3. Extracción y limpieza}
+
+Procesar los archivos con herramientas adecuadas para PDF, HTML y documentos de texto.
+
+\paragraph{Tareas.}
+\begin{itemize}
+  \item Extracción de texto.
+  \item Identificación de tablas.
+  \item Normalización de caracteres.
+  \item Detección de duplicados.
+  \item Detección de documentos vacíos o mal procesados.
+  \item Registro de errores.
+  \item Identificación de documentos potencialmente desactualizados.
+\end{itemize}
+
+No eliminar indiscriminadamente tablas, encabezados o referencias legales: pueden ser esenciales para responder preguntas.
+
+\paragraph{Salida.}
+Corpus procesado con trazabilidad hacia la fuente original. La malla curricular, si se usa, se estructura aparte para herramientas o reglas (prerrequisitos), no como texto mezclado sin criterio en el índice de recuperación.
+
+\section{Fase 4. EDA del corpus}
+
+Analizar:
+
+\begin{itemize}
+  \item Tipos de documentos.
+  \item Años y versiones.
+  \item Longitud de los textos.
+  \item Calidad de extracción.
+  \item Cobertura temática.
+  \item Vacíos de información.
+  \item Duplicados y posibles contradicciones.
+\end{itemize}
+
+Generar tablas y gráficos, pero acompañarlos de conclusiones que expliquen cómo afectan al sistema.
+
+\paragraph{Salida.}
+Informe de EDA documental y decisiones de preparación del corpus.
+
+\section{Fase 5. Construcción del dataset de consultas}
+
+Construir un banco inicial con preguntas extraídas de las FAQ, propuestas por el equipo y generadas a partir de documentos oficiales.
+
+Cada registro debe incluir, como mínimo:
+
+\begin{itemize}
+  \item Identificador.
+  \item Pregunta.
+  \item Categoría.
+  \item Fuente de referencia.
+  \item Respuesta de referencia, cuando se haya verificado.
+  \item Estado de validación.
+\end{itemize}
+
+Se puede añadir complejidad, número de fuentes requeridas, estrategia candidata y si la pregunta es respondible con el corpus disponible.
+
+Las etiquetas deben basarse en reglas documentadas y revisión humana, no únicamente en la opinión de un modelo de IA.
+
+\section{Fase 6. Validación del dataset}
+
+Los validadores revisan las preguntas y sus respuestas.
+
+\paragraph{Procedimiento.}
+\begin{itemize}
+  \item Comprobar que la consulta sea pertinente.
+  \item Verificar la respuesta contra la documentación.
+  \item Confirmar la referencia documental.
+  \item Identificar ambigüedades.
+  \item Marcar preguntas sin respuesta verificable.
+  \item Revisar los casos que requieren varias fuentes.
+\end{itemize}
+
+Documentar los desacuerdos entre validadores y cómo se resolvieron.
+
+\paragraph{Salida.}
+Banco de evaluación validado.
+
+\section{Fase 7. Preparación de los conjuntos de datos}
+
+Si se entrena un router o se hace fine-tuning, separar los datos según su función. Por ejemplo: entrenamiento, validación y prueba final.
+
+La partición debe evitar fugas de información: preguntas casi idénticas o derivadas del mismo caso no deberían repartirse indiscriminadamente entre entrenamiento y prueba.
+
+El conjunto de prueba debe quedar separado de las decisiones de ajuste.
+
+Si el router utiliza un clasificador entrenado, registrar sus características de entrada, etiquetas, algoritmo, hiperparámetros y semilla aleatoria.
+
+\section{Fase 8. Implementación de las estrategias candidatas}
+
+Implementar las configuraciones que realmente se puedan evaluar:
+
+\begin{center}
+\begin{tabular}{@{}clp{0.58\textwidth}@{}}
+\toprule
+\textbf{Config.} & \textbf{Nombre} & \textbf{Descripción} \\
+\midrule
+A0 & Modelo base & Sin recuperación documental. \\
+A1 & RAG & Modelo con recuperación documental. \\
+A2 & Fine-tuning & Modelo con fine-tuning, si es viable. \\
+A3 & RAG + herramientas & RAG con herramientas para información estructurada. \\
+A4 & Compuesta fija & Estrategia compuesta fija, si su complejidad está justificada. \\
+A5 & Routing predictivo & Selecciona entre estrategias candidatas. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+El fine-tuning y el multiagente no tienen que incluirse a la fuerza si los recursos o los datos no permiten evaluarlos correctamente.
+
+Para la estrategia basada en mallas, se pueden usar herramientas o reglas explícitas para consultar prerrequisitos, siempre que esa información esté disponible y pueda estructurarse correctamente.
+
+\section{Fase 9. Ejecución controlada}
+
+Todas las configuraciones deben evaluarse sobre el mismo conjunto de consultas.
+
+Registrar:
+
+\begin{itemize}
+  \item Identificador de la consulta.
+  \item Configuración ejecutada.
+  \item Respuesta producida.
+  \item Fuentes recuperadas.
+  \item Latencia.
+  \item Tokens consumidos, cuando corresponda.
+  \item Costo estimado.
+  \item Ruta seleccionada.
+  \item Errores y excepciones.
+\end{itemize}
+
+Mantener constantes, en la medida de lo posible, los modelos, versiones, parámetros y condiciones de ejecución.
+
+Si se usan servicios externos, registrar sus versiones o identificadores, parámetros y fechas de ejecución.
+
+\section{Fase 10. Evaluación}
+
+Evaluar los resultados desde varias dimensiones.
+
+\paragraph{Calidad.}
+Exactitud de la respuesta; corrección de la información; fidelidad a las fuentes; corrección de las citas; tasa de respuestas sin fundamento.
+
+\paragraph{Eficiencia.}
+Latencia mediana; percentil~95 de latencia; costo por consulta; tokens consumidos.
+
+\paragraph{Routing.}
+Selección de la estrategia adecuada según los criterios establecidos; errores de selección; frecuencia de uso de cada estrategia; casos en los que el sistema selecciona una estrategia innecesariamente costosa.
+
+Definir las métricas y sus reglas de cálculo antes de ejecutar la evaluación final.
+
+\section{Fase 11. Análisis estadístico}
+
+Comparar las configuraciones:
+
+\begin{itemize}
+  \item En el conjunto completo.
+  \item Por categoría.
+  \item Por complejidad.
+  \item En consultas que necesitan varias fuentes.
+  \item En consultas que necesitan herramientas.
+\end{itemize}
+
+Utilizar comparaciones pareadas porque las mismas consultas se ejecutan con varias estrategias.
+
+Cuando corresponda, reportar intervalos de confianza y pruebas estadísticas adecuadas al tipo de métrica y diseño experimental.
+
+No limitarse a demostrar que una configuración es más rápida: analizar si mantiene una calidad aceptable.
+
+\section{Fase 12. Reproducibilidad y documentación}
+
+Registrar:
+
+\begin{itemize}
+  \item Versiones de dependencias.
+  \item Semillas aleatorias.
+  \item Configuración de modelos.
+  \item Versiones del corpus.
+  \item Parámetros de recuperación.
+  \item Configuración del router.
+  \item Fecha de ejecución.
+  \item Datos de entrada utilizados.
+  \item Resultados generados.
+\end{itemize}
+
+El repositorio debe permitir ejecutar el pipeline sin depender de rutas locales de una sola computadora ni de archivos que no estén documentados.
+
+\paragraph{Flujo resumido.}
+Documentación $\to$ extracción $\to$ EDA $\to$ banco de consultas $\to$ validación $\to$ preparación de datos $\to$ implementación $\to$ ejecución experimental $\to$ evaluación $\to$ análisis estadístico $\to$ informe final.
+
+\end{document}
