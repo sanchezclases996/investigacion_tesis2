@@ -1,0 +1,16 @@
+query_id,pregunta,categoria,complejidad,doc_referencia,seccion_referencia,respuesta_esperada,requiere_herramienta,requiere_multiples_fuentes,es_respondible,validacion_experta,candidate_strategy
+Q001,¿Qué modalidades de estudio tiene la UMA?,N,baja,D012,,"Presencial, Semipresencial y A Distancia; varían según la carrera.",False,False,True,draft,A1
+Q002,¿Pueden deshabilitarme por inasistencias?,N,media,D012,,Sí: hasta 30% de inasistencias a sesiones con horas lectivas implica desaprobación del curso (según FAQ/reglamento).,False,False,True,draft,A1
+Q003,¿Qué es el examen sustitutorio y quiénes pueden acceder?,N,media,D012,,Evaluación extraordinaria opcional que reemplaza la menor nota de parcial o final; se programa en la semana 17.,False,False,True,draft,A1
+Q004,¿En qué consiste el curso o examen de aplazados?,N,alta,D012,,"Trámite para recuperar asignaturas desaprobadas en el periodo regular inmediato anterior, con condiciones (no por inasistencias).",False,False,True,draft,A1
+Q005,¿Dónde reviso mis horarios de clase actualizados?,A,baja,D012,,"En SIGU, opción matrícula (www.sigu.uma.edu.pe/alumno/entrar).",False,False,True,draft,A5
+Q006,¿Qué hago si tengo cruce de horario o un curso no aparece en mi matrícula?,A,media,D012,,Escribir a Coordinación Académica (coacademica@uma.edu.pe) con código y detalle.,False,False,True,draft,A5
+Q007,¿Cuánto cuesta el carné universitario y cómo lo solicito?,A,baja,D012,,S/30.00; registrar pedido en SIGU UMA.,False,False,True,draft,A1
+Q008,"Perdí mi carné, ¿puedo solicitar otro?",A,media,D012,,"Sí, duplicado por SIGU adjuntando denuncia policial de pérdida/robo.",False,False,True,draft,A1
+Q009,¿Cómo visualizo mi avance curricular?,R,baja,D012,,SIGU → Académica / Avance curricular.,True,False,True,draft,A3
+Q010,¿Cuáles son los requisitos para tramitar el diploma de bachiller o título?,M,alta,D005,,Ver FAQ y Reglamento de grados y títulos (D005); validar lista vigente con fuente oficial.,False,True,True,draft,A3
+Q011,¿Qué condiciones establece el reglamento de matrícula para matricularme?,N,media,D002,,Pendiente: citar artículos del Reglamento general de matrícula (D002) tras revisión humana.,False,False,False,draft,A1
+Q012,¿Qué dice el reglamento académico sobre evaluación y asistencia?,M,alta,D001,,Pendiente: contrastar D001 (reglamento académico) y FAQ D012; no inventar umbrales.,False,True,False,draft,A1
+Q013,¿Cuáles son los prerrequisitos del curso C103 en la malla demo?,R,media,malla_demo_grafo,,Usar herramienta sobre grafo demo (no es la malla oficial UMA).,True,False,True,draft,A3
+Q014,¿Puedo convalidar un curso cursado en otra universidad?,N,alta,D009,,Consultar Reglamento de convalidaciones (D009); respuesta gold pendiente de validación.,False,False,True,draft,A1
+Q015,¿Cómo solicito una beca y qué requisitos aplica el reglamento?,A,alta,D007,,Pendiente: D007 + canal institucional; posible derivación a persona.,False,False,False,draft,A5
