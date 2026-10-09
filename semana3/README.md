@@ -1,33 +1,50 @@
-# Semana 3 — EDA y baseline BM25
+# tesis-routing-universitario
 
-Pipeline de tipo LLM + RAG. En esta etapa se documenta el estado de los datos y un baseline léxico de recuperación.
+Repositorio reproducible del plan de tesis: asistente de consultas académicas-administrativas con enrutamiento predictivo.
+
+**Caso:** Facultad de Ingeniería y Negocios, UMA (San Juan de Lurigancho).
+
+**Pregunta:** ¿el routing predictivo de estrategias de IA mejora la relación calidad–latencia–costo frente a una estrategia fija?
+
+## Estrategias (A0–A5)
+
+| Código | Configuración |
+|--------|----------------|
+| A0 | Modelo base |
+| A1 | RAG |
+| A2 | Fine-tuning (si es viable) |
+| A3 | RAG + herramientas (malla) |
+| A4 | Estrategia compuesta fija |
+| A5 | Routing predictivo |
+
+## Inicio rápido
+
+```bash
+python3.11 -m venv .venv
+source .venv/bin/activate
+pip install -e ".[dev]"
+cp .env.example .env
+
+make eda
+make prepare
+# make experiment EXP=baseline   # cuando haya datos y API
+```
 
 ## Layout
 
-- `data/` — muestra del corpus e ítems de evaluación (`DATA_MANIFEST.json` con hash por archivo)
-- `src/` — EDA y baseline BM25
-- `config/baseline.json` — seed y valores de top-k
-- `logs/` — métricas del baseline
-- `reports/` — figuras y conclusiones del EDA
+| Ruta | Rol |
+|------|-----|
+| `configs/` | Parámetros versionados (datos, retrieval, router, experimentos) |
+| `data/` | Raw → interim → processed (sin secretos ni PII en git) |
+| `src/thesis_routing/` | Código del pipeline |
+| `experiments/` | Matriz, corridas y resultados |
+| `reports/` | EDA, figuras y resúmenes |
+| `docs/` | Protocolo, gobernanza y decisiones |
+| `tests/` | Pytest por módulo |
+| `scripts/` | Entradas shell reproducibles |
 
-## Dependencias
+Detalle del flujo experimental: ver `docs/experimental_protocol.md` y el entregable de semana 2.
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-```
+## Datos
 
-## Ejecución
-
-```bash
-PYTHONPATH=src python src/eda.py
-PYTHONPATH=src python src/baseline_bm25.py
-```
-
-## Baseline
-
-- Recuperación: BM25
-- Comparación: top-k ∈ {5, 20}
-- Métricas: Recall@k, MRR (acierto si el gold aparece en el contexto recuperado)
-- Muestra: N = 120 (50 S1 / 50 S2 / 20 PII), seed 42
+No subir documentación autorizada ni consultas con PII. Ver `data/README.md` y `docs/data_governance.md`.
