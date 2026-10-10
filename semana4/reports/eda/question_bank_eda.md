@@ -10,13 +10,14 @@
 
 Figuras: `eda_qb_categoria.png`, `eda_qb_complejidad.png`.
 
-## Observaciones (para decisión)
+## Observaciones
 
-1. El piloto ya cubre N/R/M/A, pero está **sesgado a N**. Evaluar A0–A5 por estrato, no solo con un promedio global.
-2. Muchas preguntas anclan en D012 (FAQ). Mantener un bloque anclado a reglamentos para no sobreajustar a la FAQ.
-3. Todo está en `draft`. Validar primero un subconjunto (40–50) antes de crecer a 300–500.
-4. `es_respondible` ≈ ancla en corpus usable (193/196); completar `respuesta_esperada` sigue pendiente en muchas filas.
-5. R y M son pocas a propósito: faltan malla oficial y evidencia multi-fuente. No inflar con preguntas inventadas.
+1. El piloto incluye tipos N, R, M y A, lo que permite plantear la comparación entre
+   recuperación documental, herramientas y derivación a persona.
+2. Las respuestas de referencia están en borrador; no hay gold validado por la facultad.
+3. Las consultas tipo R usan el grafo de demostración o referencias a SIGU.
+4. El tamaño actual es un piloto de trabajo; la ampliación queda sujeta a evidencia
+   documental y a validación posterior.
 
 ## Limitación
 

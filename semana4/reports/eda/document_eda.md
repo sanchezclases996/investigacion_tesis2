@@ -24,25 +24,34 @@ o de una versión textual usable.
 
 Figuras: `eda_calidad_extraccion.png`, `eda_paginas_vs_palabras.png`.
 
-## 3. Cobertura temática (aproximada por términos)
+## 3. Cobertura por aspectos (cuantitativa)
 
-Matriz: `reports/figures/eda_matriz_cobertura.csv` y `eda_matriz_cobertura.png`.
-La presencia de términos indica cobertura lexical, no la vigencia de un artículo concreto.
+Criterio binario documentado (`cubierto` / `no_cubierto`):
+`{'min_hits': 3, 'min_densidad_por_1k': 0.4, 'min_tfidf_cosine': 0.04, 'min_words_doc': 300}`.
 
-| Tema | Docs con al menos 1 mención |
-|------|-----------------------------|
-| admision | 8 / 12 |
-| asistencia | 6 / 12 |
-| becas | 5 / 12 |
-| calendario | 6 / 12 |
-| convalidacion | 6 / 12 |
-| creditos | 11 / 12 |
-| evaluacion | 11 / 12 |
-| malla_plan | 9 / 12 |
-| matricula | 10 / 12 |
-| prerrequisitos | 2 / 12 |
-| tarifas | 9 / 12 |
-| tramites_grados | 10 / 12 |
+Artefactos: `eda_cobertura_hits.csv`, `eda_cobertura_densidad_1k.csv`,
+`eda_cobertura_tfidf.csv`, `eda_cobertura_etiqueta.csv`, heatmap TF-IDF.
+
+Los aspectos separan procesos (p. ej. matrícula vs anulación/retiro;
+convalidación vs aprobación). La métrica indica evidencia textual medible,
+no vigencia jurídica de un artículo.
+
+| Aspecto | Docs cubiertos |
+|---------|----------------|
+| admision | 5 / 12 |
+| anulacion_retiro | 0 / 12 |
+| aprobacion_desaprobacion | 6 / 12 |
+| asistencia_inasistencia | 4 / 12 |
+| becas | 4 / 12 |
+| calendario_periodo | 4 / 12 |
+| convalidacion | 5 / 12 |
+| creditos_academicos | 7 / 12 |
+| evaluacion_examenes | 3 / 12 |
+| malla_plan_estudios | 7 / 12 |
+| matricula_inscripcion | 6 / 12 |
+| prerrequisitos | 0 / 12 |
+| tarifas_pensiones | 6 / 12 |
+| tramites_grados_titulos | 5 / 12 |
 
 ## 4. Implicaciones para el diseño experimental
 

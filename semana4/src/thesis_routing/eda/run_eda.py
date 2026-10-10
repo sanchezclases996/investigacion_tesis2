@@ -8,13 +8,13 @@ from __future__ import annotations
 
 import json
 import logging
-import re
-from collections import Counter
 from pathlib import Path
 from typing import Any
 
 import matplotlib.pyplot as plt
 import pandas as pd
+
+from thesis_routing.eda.coverage_aspects import build_coverage_bundle
 
 LOGGER = logging.getLogger(__name__)
 
@@ -27,22 +27,6 @@ REPORT_DOC = ROOT / "reports" / "eda" / "document_eda.md"
 REPORT_QB = ROOT / "reports" / "eda" / "question_bank_eda.md"
 SUMMARY_JSON = ROOT / "reports" / "eda" / "eda_summary.json"
 
-# Temas orientativos para cobertura (no afirman vigencia jurídica)
-THEME_PATTERNS: dict[str, re.Pattern[str]] = {
-    "matricula": re.compile(r"matricul", re.I),
-    "asistencia": re.compile(r"inasistenc|asistenc", re.I),
-    "evaluacion": re.compile(r"evaluaci[oó]n|examen|parcial|sustitutor", re.I),
-    "creditos": re.compile(r"cr[eé]dito", re.I),
-    "prerrequisitos": re.compile(r"prerrequis|pre-?requis", re.I),
-    "convalidacion": re.compile(r"convalid", re.I),
-    "tramites_grados": re.compile(r"bachiller|t[ií]tulo|grado", re.I),
-    "becas": re.compile(r"beca", re.I),
-    "admision": re.compile(r"admisi[oó]n", re.I),
-    "tarifas": re.compile(r"tarif|pension|pago", re.I),
-    "malla_plan": re.compile(r"plan de estudi|malla|curricul", re.I),
-    "calendario": re.compile(r"calendario acad[eé]mico|periodo acad[eé]mico", re.I),
-}
-
 
 def _load_inventory() -> pd.DataFrame:
     """Load the documental inventory CSV."""
@@ -51,33 +35,6 @@ def _load_inventory() -> pd.DataFrame:
     df["chars"] = pd.to_numeric(df["chars"], errors="coerce").fillna(0).astype(int)
     df["words"] = pd.to_numeric(df["words"], errors="coerce").fillna(0).astype(int)
     return df
-
-
-def _theme_hits(text: str) -> dict[str, int]:
-    """Count theme keyword hits in one document text."""
-    return {theme: len(pat.findall(text)) for theme, pat in THEME_PATTERNS.items()}
-
-
-def _coverage_matrix(df: pd.DataFrame) -> pd.DataFrame:
-    """Build theme × document presence matrix (Sí / Parcial / No)."""
-    rows: list[dict[str, str]] = []
-    for theme in THEME_PATTERNS:
-        row: dict[str, str] = {"tema": theme}
-        for _, doc in df.iterrows():
-            path = TEXT_DIR / f"{doc['doc_id']}.txt"
-            if not path.exists():
-                row[doc["doc_id"]] = "No"
-                continue
-            text = path.read_text(encoding="utf-8", errors="replace")
-            hits = len(THEME_PATTERNS[theme].findall(text))
-            if hits >= 8:
-                row[doc["doc_id"]] = "Sí"
-            elif hits >= 1:
-                row[doc["doc_id"]] = "Parcial"
-            else:
-                row[doc["doc_id"]] = "No"
-        rows.append(row)
-    return pd.DataFrame(rows)
 
 
 def _plot_bar(series: pd.Series, title: str, xlabel: str, out: Path) -> None:
@@ -122,33 +79,8 @@ def run_document_eda(df: pd.DataFrame) -> dict[str, Any]:
     fig.savefig(FIG_DIR / "eda_paginas_vs_palabras.png", dpi=140)
     plt.close(fig)
 
-    cov = _coverage_matrix(df)
-    cov.to_csv(FIG_DIR / "eda_matriz_cobertura.csv", index=False)
-
-    # Heat-like table as image via text counts
-    score = (
-        cov.set_index("tema")
-        .replace({"Sí": 2, "Parcial": 1, "No": 0})
-        .apply(pd.to_numeric, errors="coerce")
-        .fillna(0)
-    )
-    fig, ax = plt.subplots(figsize=(10, 5.5))
-    im = ax.imshow(score.to_numpy(dtype=float), aspect="auto", cmap="YlGn")
-    ax.set_xticks(range(len(score.columns)))
-    ax.set_xticklabels(score.columns, rotation=45, ha="right")
-    ax.set_yticks(range(len(score.index)))
-    ax.set_yticklabels(score.index)
-    ax.set_title("Cobertura temática (0=No, 1=Parcial, 2=Sí)")
-    fig.colorbar(im, ax=ax, fraction=0.03)
-    fig.tight_layout()
-    fig.savefig(FIG_DIR / "eda_matriz_cobertura.png", dpi=140)
-    plt.close(fig)
-
+    cov_bundle = build_coverage_bundle(TEXT_DIR, df, FIG_DIR)
     weak = df[df["estado_extraccion"] != "ok"]["doc_id"].tolist()
-    theme_totals: Counter[str] = Counter()
-    for path in TEXT_DIR.glob("D*.txt"):
-        hits = _theme_hits(path.read_text(encoding="utf-8", errors="replace"))
-        theme_totals.update({k: (1 if v > 0 else 0) for k, v in hits.items()})
 
     return {
         "n_docs": int(len(df)),
@@ -158,8 +90,10 @@ def run_document_eda(df: pd.DataFrame) -> dict[str, Any]:
         "total_words": int(df["words"].sum()),
         "total_pages": int(df["n_pages"].sum()),
         "by_dominio": by_dom.to_dict(),
-        "docs_con_tema": dict(theme_totals),
+        "docs_con_tema": cov_bundle["docs_cubiertos_por_aspecto"],
+        "coverage_umbrales": cov_bundle["umbrales"],
         "coverage_csv": str(FIG_DIR / "eda_matriz_cobertura.csv"),
+        "coverage_tfidf_csv": str(FIG_DIR / "eda_cobertura_tfidf.csv"),
     }
 
 
@@ -222,13 +156,20 @@ def write_document_report(df: pd.DataFrame, stats: dict[str, Any]) -> None:
         "",
         "Figuras: `eda_calidad_extraccion.png`, `eda_paginas_vs_palabras.png`.",
         "",
-        "## 3. Cobertura temática (aproximada por términos)",
+        "## 3. Cobertura por aspectos (cuantitativa)",
         "",
-        "Matriz: `reports/figures/eda_matriz_cobertura.csv` y `eda_matriz_cobertura.png`.",
-        "La presencia de términos indica cobertura lexical, no la vigencia de un artículo concreto.",
+        "Criterio binario documentado (`cubierto` / `no_cubierto`):",
+        f"`{stats.get('coverage_umbrales', {})}`.",
         "",
-        "| Tema | Docs con al menos 1 mención |",
-        "|------|-----------------------------|",
+        "Artefactos: `eda_cobertura_hits.csv`, `eda_cobertura_densidad_1k.csv`,",
+        "`eda_cobertura_tfidf.csv`, `eda_cobertura_etiqueta.csv`, heatmap TF-IDF.",
+        "",
+        "Los aspectos separan procesos (p. ej. matrícula vs anulación/retiro;",
+        "convalidación vs aprobación). La métrica indica evidencia textual medible,",
+        "no vigencia jurídica de un artículo.",
+        "",
+        "| Aspecto | Docs cubiertos |",
+        "|---------|----------------|",
     ]
     for theme, n in sorted(stats["docs_con_tema"].items()):
         lines.append(f"| {theme} | {n} / {stats['n_docs']} |")
