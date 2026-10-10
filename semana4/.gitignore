@@ -31,3 +31,4 @@ experiments/runs/*/
 .DS_Store
 .idea/
 .vscode/
+notebooks/04_eda_resultados.ipynb
